@@ -45,7 +45,7 @@ void SSLL<T>::insert( const T& element, int position ) {
     for (int i = 1; i != position -1; ++i) {
         temp = temp->next;
     }
-    listSize++
+    listSize++;
 }
 
 template <typename T>
@@ -61,9 +61,9 @@ void SSLL<T>::push_front( const T& element ) {
         temp2 = head;
         head = temp;
         head->next = temp2;
-        temp1 = NULL;
+        temp = NULL;
         temp2 = NULL;
-        delete temp1, temp2;
+        delete temp, temp2;
         listSize++;
     }
 }

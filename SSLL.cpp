@@ -24,12 +24,14 @@ SSLL<T>::~SSLL() {
 template <typename T>
 T SSLL<T>::replace( const T& element, int position ) {
     // Probably not correct!
-    if (listSize != 0) {
+    if ( listSize != 0 ) {
         Node* start = head;
-        for (int i = 1; i != position; i++) {
+        for (int i = 0; i != position; i++) {
             start = start->next;
         }
-        *start = element;
+        T temp = start->value;
+        start->value = element;
+        return temp;
     }
     else {
         throw std::out_of_range("list is empty!");
@@ -39,13 +41,27 @@ T SSLL<T>::replace( const T& element, int position ) {
 
 template <typename T>
 void SSLL<T>::insert( const T& element, int position ) {
-    Node* temp = head;
-    // get the element before the position, as it will point
-    // to the element after the position in the end.
-    for (int i = 1; i != position -1; ++i) {
-        temp = temp->next;
+    if ( position == listSize ){ 
+        push_back( element );
+    } else if ( position == 0 ) {
+        push_front( element );
+    } else if ( position < listSize ) {
+        Node* temp = head;
+        // get the element before the position, as it will point
+        // to the element after the position in the end.
+        for (int i = 0; i != (position - 1); ++i) {
+            temp = temp->next;
+        }
+        Node* temp2 = temp->next;
+        temp->next = new Node( element );
+        temp->next->next = temp2;
+        temp = NULL;
+        temp2 = NULL;
+        delete temp, temp2;
+    } else {
+        throw std::domain_error("List is too short!");
     }
-    listSize++;
+    listSize++; 
 }
 
 template <typename T>
@@ -135,7 +151,7 @@ T SSLL<T>::remove( int position ) {
     Node* temp = head;
     // get the element before the position, as it will point
     // to the element after the position in the end.
-    for (int i = 1; i != position -1; ++i) {
+    for (int i = 0; i != (position - 1); ++i) {
         temp = temp->next;
     }
     Node* temp2 = temp->next;
@@ -151,7 +167,7 @@ T SSLL<T>::remove( int position ) {
 template <typename T>
 T SSLL<T>::item_at( int position ) const {
     Node* temp = head;
-    for (int i = 1; i != position; ++i) {
+    for (int i = 0; i != position; ++i) {
         temp = temp->next;
     }
     T value = temp->value;
@@ -176,7 +192,14 @@ int SSLL<T>::size() const {
 
 template <typename T>
 void SSLL<T>::clear() {
-  
+    Node* temp = head;
+    Node* temp2;
+    while (temp != NULL) {
+        temp2 = temp->next;
+        delete temp;
+        temp = temp2;
+        --listSize;
+    }
 }
 
 template <typename T>
@@ -187,5 +210,11 @@ bool SSLL<T>::contains( const T& element,
 
 template <typename T>
 std::ostream& SSLL<T>::print( std::ostream& out ) const {
-    
+    // Node* temp = head;
+    // ostringstream ostr;
+    // for (int i = 0; i != position; i++) {
+    //     ostr << temp->value << " ";
+    //     temp = temp->next;
+    // }
+    // return ost
 }

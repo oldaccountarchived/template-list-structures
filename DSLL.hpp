@@ -1,32 +1,32 @@
 #include <ostream>
 
 template <typename T>
-class SSLL {
+class DSLL {
 private:
     struct Node {
         T value;
         Node* next;
-        
+
         // Node with no arguments!
         Node() {
             this->value = NULL;
             this->value = NULL;
         }
-        
+
         // For creating nodes with values.
         Node( T value ) {
             this->value = value;
             this->next = NULL;
         }
     };
-    Node* head, tail;
+    Node* head, tail, poolHead;
     // Traversing the list every time is lame.
-    int listSize;
+    int listSize, poolSize;
     
 public:
-    SSLL();
-    SSLL( const SSLL& src );
-    ~SSLL();
+    DSLL();
+    DSLL( const SSLL& src );
+    ~DSLL();
     SSLL& operator=( const SSLL& src ) {
         if ( &src == this )
             return *this;

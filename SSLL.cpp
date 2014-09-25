@@ -80,16 +80,12 @@ void SSLL<T>::push_front( const T& element ) {
 template <typename T>
 void SSLL<T>::push_back( const T& element ) {
     if (listSize == 0) {
-        Node* temp = new Node( element );
-        this->head = temp;
-        this->tail = temp;
-        temp = NULL;
+        this->head = new Node( element );
+        this->tail = head;
     }
     else {
-        Node* temp = new Node( element );
-        tail->next = temp;
-        tail = temp;
-        temp = NULL;
+        tail->next = new Node( element );
+        tail = tail->next;
     }
     ++listSize;
 }

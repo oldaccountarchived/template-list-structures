@@ -11,7 +11,7 @@ DSLL<T>::DSLL() {
 }
 
 template <typename T>
-DSLL<T>::DSLL( const SSLL& src ) {
+DSLL<T>::DSLL( const DSLL& src ) {
     // SOMEDAY, SOMEHOW
     // I'M GONNA IMPLEMENT THIS
     // BUT NOT RIGHT NOW
@@ -35,14 +35,13 @@ T DSLL<T>::replace( const T& element, int position ) {
         T temp = start->value;
         start->value = element;
         return temp;
-    }
-    else {
-        throw std::out_of_range("list is empty!");
+    } else {
+        throw std::domain_error("list is empty!");
     }
 }
 
 template <typename T>
-void SSLL<T>::insert( const T& element, int position ) {
+void DSLL<T>::insert( const T& element, int position ) {
     if ( position == listSize ){ 
         push_back( element );
     } else if ( position == 0 ) {
@@ -55,7 +54,18 @@ void SSLL<T>::insert( const T& element, int position ) {
             temp = temp->next;
         }
         Node* temp2 = temp->next;
-        temp->next = new Node( element );
+        if (poolSize == 0) {
+            temp->next = new Node( element );
+        } else {
+            temp->next = poolHead;
+            temp->next->value = element;
+            --poolSize;
+            if ( poolSize == 0 ) {
+                poolHead = NULL;
+            } else {
+                poolHead = poolHead->next;
+            }
+        }
         temp->next->next = temp2;
         temp = NULL;
         temp2 = NULL;
@@ -64,4 +74,100 @@ void SSLL<T>::insert( const T& element, int position ) {
         throw std::domain_error("List is too short!");
     }
     listSize++; 
+}
+
+template <typename T>
+void DSLL<T>::push_front( const T& element ) {
+    if (listSize == 0) {
+        if (poolSize == 0) {
+            Node* temp = new Node( element );
+            this->head = temp;
+            this->tail = temp;
+        } else {
+            poolHead->value = element;
+            this->head = poolHead;
+            this->tail = poolHead;
+            poolSize--;
+            if (poolSize == 0) {
+                poolHead = NULL;
+            } else {
+                poolHead = poolHead->next;
+            }
+        }
+    } else {
+        if (poolSize == 0) {
+            Node* temp = new Node( element );
+            temp->next = head;
+            head = temp;
+            temp = NULL;
+            delete temp;
+        } else {
+            poolHead->value = element;
+            poolHead->next = head;
+            head = poolHead;
+            --poolSize;
+            if (poolSize == 0) {
+                poolHead = NULL;
+            } else {
+                poolHead = poolHead->next;
+            }
+        }
+    }
+    listSize++;
+}
+
+template <typename T>
+void DSLL<T>::push_back( const T& element ) {
+    if (listSize == 0) {
+        if ( poolSize == 0 ) {
+            Node* temp = new Node( element );
+            this->head = temp;
+            this->tail = temp;
+        } else {
+            // Use the pool, dude!
+            poolHead->value = element;
+            this->head = tail;
+            this->tail = head;
+            --poolSize;
+            if (poolSize == 0) {
+                poolHead = NULL;
+            } else {
+                poolHead = poolHead->next;
+            }
+        }
+    }
+    else {
+        if ( poolSize == 0 ) {
+            Node* temp = new Node( element );
+            tail->next = temp;
+            tail = temp;
+        } else {
+            poolHead->value = element;
+            tail->next = poolHead;
+            tail = poolHead;
+            --poolSize;
+            if (poolSize == 0) {
+                poolHead = NULL;
+            } else {
+                poolHead = poolHead->next;
+            }
+        }
+    }
+    listSize++;
+}
+
+template <typename T>
+T DSLL<T>::pop_front() {
+    if (listSize != 0) {
+        T val = head->value;
+        Node* temp = head->next;
+        // add the current head to the pool, don't delete.
+        head->next = poolHead->next;
+        poolHead = head;
+        head = temp;
+        listSize--;
+        return val;
+    } else {
+        throw std::out_of_range("list is empty!");
+    }
 }

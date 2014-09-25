@@ -19,7 +19,8 @@ private:
             this->next = NULL;
         }
     };
-    Node* head, tail;
+    Node* head; 
+    Node* tail;
     // Traversing the list every time is lame.
     int listSize;
     

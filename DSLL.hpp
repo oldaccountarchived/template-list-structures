@@ -19,15 +19,18 @@ private:
             this->next = NULL;
         }
     };
-    Node* head, tail, poolHead;
+    Node* head; 
+    Node* tail; 
+    Node* poolHead;
     // Traversing the list every time is lame.
-    int listSize, poolSize;
+    int listSize; 
+    int poolSize;
     
 public:
     DSLL();
-    DSLL( const SSLL& src );
+    DSLL( const DSLL& src );
     ~DSLL();
-    SSLL& operator=( const SSLL& src ) {
+    DSLL& operator=( const DSLL& src ) {
         if ( &src == this )
             return *this;
     }

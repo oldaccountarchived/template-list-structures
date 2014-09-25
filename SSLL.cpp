@@ -57,18 +57,17 @@ void SSLL<T>::insert( const T& element, int position ) {
         Node* temp2 = temp->next;
         temp->next = new Node( element );
         temp->next->next = temp2;
+        ++listSize; 
     } else {
         throw std::domain_error("List is too short!");
     }
-    ++listSize; 
 }
 
 template <typename T>
 void SSLL<T>::push_front( const T& element ) {
     if (listSize == 0) {
-        Node* temp = new Node( element );
-        this->head = temp;
-        this->tail = temp;
+        this->head = new Node( element );
+        this->tail = head;
     } else {
         Node* temp = new Node( element );
         temp->next = head;
@@ -82,8 +81,7 @@ void SSLL<T>::push_back( const T& element ) {
     if (listSize == 0) {
         this->head = new Node( element );
         this->tail = head;
-    }
-    else {
+    } else {
         tail->next = new Node( element );
         tail = tail->next;
     }
@@ -128,29 +126,36 @@ T SSLL<T>::pop_back() {
         }
         listSize--;
         return val;
-    }
-    else {
+    } else {
         throw std::out_of_range("list is empty!");
     }
 }
 
 template <typename T>
 T SSLL<T>::remove( int position ) {
-    T val;
-    // Works with list size 2 or greater, implement for size 1...
-    Node* temp = head;
-    // get the element before the position, as it will point
-    // to the element after the position in the end.
-    for (int i = 0; i != (position - 1); ++i) {
-        temp = temp->next;
+    if ( position < listSize ) {
+        if ( listSize == 1 ) {
+            return pop_back();
+        } else {
+            T val;
+            // Works with list size 2 or greater, implement for size 1...
+            Node* temp = head;
+            // get the element before the position, as it will point
+            // to the element after the position in the end.
+            for (int i = 0; i != (position - 1); ++i) {
+                temp = temp->next;
+            }
+            Node* temp2 = temp->next;
+            temp->next = temp->next->next;
+            val = temp2->value;
+            delete temp2;
+            temp2 = NULL;
+            --listSize;
+            return val;
+        }
+    } else {
+        throw std::domain_error("List is too short!");
     }
-    Node* temp2 = temp->next;
-    temp->next = temp->next->next;
-    val = temp2->value;
-    delete temp2;
-    temp2 = NULL;
-    listSize--;
-    return val;
 }
 
 template <typename T>
@@ -182,7 +187,6 @@ void SSLL<T>::clear() {
     Node* temp = head;
     Node* temp2;
     while (temp != NULL) {
-        std::cout << "tester" << std::endl;
         temp2 = temp->next;
         delete temp;
         temp = temp2;

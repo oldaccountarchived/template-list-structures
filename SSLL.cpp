@@ -83,11 +83,13 @@ void SSLL<T>::push_back( const T& element ) {
         Node* temp = new Node( element );
         this->head = temp;
         this->tail = temp;
+        temp = NULL;
     }
     else {
         Node* temp = new Node( element );
         tail->next = temp;
         tail = temp;
+        temp = NULL;
     }
     ++listSize;
 }

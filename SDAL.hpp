@@ -6,6 +6,7 @@ private:
     int maxSize;
     int currentSize;
     T* list;
+    void resizeList();
     
 public:
     SDAL();

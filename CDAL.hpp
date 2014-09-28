@@ -1,18 +1,29 @@
 #include <ostream>
 
 template <typename T>
-class SDAL {
+class CDAL {
 private:
-    int maxSize;
-    int currentSize;
-    T* list;
+    struct Node {
+        // Fixed size list of 50.
+        T* list;
+        Node* next;
+        
+        Node() {
+            this->list = new T[50];
+            this->next = NULL;
+        }
+    };
+    Node* head; 
+    int maxSize;     // Max number of elements CDAL can hold before adding 
+                     // a new Array.
+    int currentSize; // Current number of elements in CDAL.
     
 public:
-    SDAL();
-    SDAL( int maxSize );
-    SDAL( const SDAL& src );
-    ~SDAL();
-    SDAL& operator=( const SDAL& src ) {
+    CDAL();
+    CDAL( int maxSize );
+    CDAL( const CDAL& src );
+    ~CDAL();
+    CDAL& operator=( const CDAL& src ) {
         if ( &src == this )
             return *this;
     }

@@ -270,6 +270,7 @@ int PSLL<T>::size() const {
 
 template <typename T>
 void PSLL<T>::clear() {
+    // TODO: Instead this should add nodes to the head.
     Node* temp = head;
     Node* temp2;
     while (temp != NULL) {

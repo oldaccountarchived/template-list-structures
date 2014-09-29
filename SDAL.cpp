@@ -1,5 +1,7 @@
 #include "SDAL.hpp"
 
+using namespace cop3530;
+
 template <typename T>
 SDAL<T>::SDAL() {
     this->list = new T[50];
@@ -152,6 +154,12 @@ void SDAL<T>::clear() {
 template <typename T>
 bool SDAL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
+    for (int i = 0; i < currentSize; ++i) {
+        if (equals(item_at(i), element)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename T>

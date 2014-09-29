@@ -1,4 +1,7 @@
 #include "CDAL.hpp"
+#include <iostream>
+
+using namespace cop3530;
 
 template <typename T>
 CDAL<T>::CDAL() {
@@ -14,7 +17,6 @@ CDAL<T>::CDAL( const CDAL& src ) {
 
 template <typename T>
 CDAL<T>::~CDAL() {
-    // MAYBE
 }
 
 template <typename T>
@@ -42,6 +44,35 @@ void CDAL<T>::insert( const T& element, int position ) {
     } else if ( position == 0 ) {
         push_front(element);
     } else if ( position < currentSize ) {
+        T nextVal;
+        T nextNextVal;
+        Node* temp = head;
+        int currentNode = position / 50;
+        // Get to the right node first...
+        for (int i = 0; i != currentNode; ++i) {
+            temp = temp->next;
+        }
+        // Move the element at the position to position + 1 and store what's in position + 1
+        // in a temporary variable.
+        nextVal = temp->list[(position + 1) % 50];
+        temp->list[(position + 1) % 50] = temp->list[position % 50];
+        // Push element to the front
+        temp->list[position % 50] = element;
+        // Re-order the remaining elements.
+        for ( int i = position + 2; i <= currentSize; ++i ) {
+            if ( currentNode < (i / 50) ) { // Check if the index is past the current node.
+                ++currentNode; // If it is, increment the current node.
+                if ( temp->next == NULL ) {
+                    // Make a new node if one isn't there!
+                    temp->next = new Node();
+                }
+                temp = temp->next; // And set the temp node to that node.
+            }
+            nextNextVal = temp->list[i % 50];
+            temp->list[i % 50] = nextVal;
+            nextVal = nextNextVal;
+        }
+        ++currentSize;
     } else {
         throw std::domain_error("Position does not exist \"Too Large\"");
     }
@@ -49,25 +80,54 @@ void CDAL<T>::insert( const T& element, int position ) {
 
 template <typename T>
 void CDAL<T>::push_front( const T& element ) {
-    
+    if (currentSize > 0) {
+        T nextVal;
+        T nextNextVal;
+        Node* temp = head;
+        int currentNode = 0;
+        // Move the 0th element to position 1 and store what's in position 1 
+        // in a temporary variable.
+        nextVal = temp->list[1];
+        temp->list[1] = temp->list[0];
+        // Push element to the front
+        temp->list[0] = element;
+        // Re-order the remaining elements.
+        for ( int i = 2; i <= currentSize; ++i ) {
+            if ( currentNode < (i)/50 ) { // Check if the index is past the current node.
+                ++currentNode; // If it is, increment the current node.
+                if ( temp->next == NULL ) {
+                    // Make a new node if one isn't there!
+                    temp->next = new Node();
+                }
+                temp = temp->next; // And set the temp node to that node.
+            }
+            nextNextVal = temp->list[i];
+            temp->list[i] = nextVal;
+            nextVal = nextNextVal;
+        }
+        ++currentSize;
+    }
+    else {
+        head->list[0] = element;
+        ++currentSize;
+    }
 }
 
 template <typename T>
 void CDAL<T>::push_back( const T& element ) {
-    // TODO: Fix in the morning!
     Node* temp = head;
-    int counter = (currentSize) / 50;
+    int counter = (currentSize / 50);
     if ( currentSize >= maxSize ) {
         for (int i = 0; i != counter; i++) {
+            if (temp->next == NULL) {
+                temp->next = new Node();
+            }
             temp = temp->next;
-        }
-        if (temp->next == NULL) {
-            temp->next = new Node();
-        }
+        } 
         maxSize += 50;
         temp = NULL;
     } 
-    int pos = (currentSize) % 50; // Tells us where the data is in that array.
+    int pos = (currentSize % 50); // Tells us where the data is in that array.
     // counter = (currentSize) / 50; // Tells us which array the data is in.
     temp = head;
     for (int i = 0; i != counter; i++) {
@@ -89,11 +149,10 @@ T CDAL<T>::pop_front() {
                 ++currentNode; // If it is, increment the current node.
                 temp = temp->next; // And set the temp node to that node.
             }
-
-            if (i + 1/50 > i/50) { // Deals with the case where i + 1 is in the next node.
-                temp->list[i] = temp->next->list[i + 1];
+            if ((i + 1)/50 > i/50) { // Deals with the case where i + 1 is in the next node.
+                temp->list[i % 50] = temp->next->list[(i + 1) % 50];
             } else { 
-                temp->list[i] = temp->list[i + 1];
+                temp->list[i % 50] = temp->list[(i + 1) % 50];
             }
         }
         --currentSize;
@@ -124,10 +183,29 @@ T CDAL<T>::pop_back() {
 template <typename T>
 T CDAL<T>::remove( int position ) {
     if ( position == currentSize - 1 ) {
-        pop_back();
+        return pop_back();
     } else if ( position == 0 ) {
-        pop_front();
+        return pop_front();
     } else if ( position < currentSize ) {
+        Node* temp = head;
+        int currentNode = position / 50; // We start at the first node.
+        for (int i = 0; i != currentNode; ++i) {
+            temp = temp->next;
+        }
+        T val = temp->list[position % 50];
+        for ( int i = position; i < currentSize - 1; ++i ) {
+            if ( currentNode < i/50 ) { // Check if the index is past the current node.
+                ++currentNode; // If it is, increment the current node.
+                temp = temp->next; // And set the temp node to that node.
+            }
+            if (((i + 1) / 50) > (i / 50)) { // Deals with the case where i + 1 is in the next node.
+                temp->list[i % 50] = temp->next->list[(i + 1) % 50];
+            } else { 
+                temp->list[i % 50] = temp->list[(i + 1) % 50];
+            }
+        }
+        --currentSize;
+        return val;
     } else {
         throw std::domain_error("Position does not exist \"Too Large\"");
     }
@@ -171,14 +249,19 @@ void CDAL<T>::clear() {
         temp2 = temp->next;
         delete temp;
         temp = temp2;
-        --currentSize;
     }
+    currentSize = 0;
 }
 
 template <typename T>
 bool CDAL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
-    
+    for (int i = 0; i < currentSize; ++i) {
+        if (equals(item_at(i), element)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename T>

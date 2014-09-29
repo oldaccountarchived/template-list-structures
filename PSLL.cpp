@@ -1,5 +1,8 @@
 #include "PSLL.hpp"
 #include <exception>
+#include <sstream>
+
+using namespace cop3530;
 
 template <typename T>
 PSLL<T>::PSLL() {
@@ -19,9 +22,7 @@ PSLL<T>::PSLL( const PSLL& src ) {
 
 template <typename T>
 PSLL<T>::~PSLL() {
-    // delete head;
-    // delete tail;
-    // delete poolHead;
+
 }
 
 template <typename T>
@@ -284,16 +285,22 @@ void PSLL<T>::clear() {
 template <typename T>
 bool PSLL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
-    
+    for (int i = 0; i < listSize; ++i) {
+        if (equals(item_at(i), element)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename T>
 std::ostream& PSLL<T>::print( std::ostream& out ) const {
-    // Node* temp = head;
-    // ostringstream ostr;
-    // for (int i = 0; i != position; i++) {
-    //     ostr << temp->value << " ";
-    //     temp = temp->next;
-    // }
-    // return ost
+    Node* temp = head;
+    std::stringstream string;
+    for (int i = 0; i != listSize; i++) {
+        string << temp->value << " ";
+        temp = temp->next;
+    }
+    out << string.str();
+    return out;
 }

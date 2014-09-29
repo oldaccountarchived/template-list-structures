@@ -1,6 +1,8 @@
 #include "SSLL.hpp"
 #include <exception>
 
+using namespace cop3530;
+
 template <typename T>
 SSLL<T>::SSLL() {
     this->head = NULL;
@@ -197,7 +199,12 @@ void SSLL<T>::clear() {
 template <typename T>
 bool SSLL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
-    
+    for (int i = 0; i < listSize; ++i) {
+        if (equals(item_at(i), element)) {
+            return true;
+        }
+    }
+    return false;    
 }
 
 template <typename T>

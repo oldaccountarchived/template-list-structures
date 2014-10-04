@@ -1,5 +1,5 @@
 #include "CDAL.hpp"
-#include <iostream>
+#include <exception>
 
 using namespace cop3530;
 
@@ -17,6 +17,7 @@ CDAL<T>::CDAL( const CDAL& src ) {
 
 template <typename T>
 CDAL<T>::~CDAL() {
+    clear();
 }
 
 template <typename T>
@@ -247,9 +248,11 @@ void CDAL<T>::clear() {
     Node* temp2;
     while (temp != NULL) {
         temp2 = temp->next;
+        delete[] temp->list;
         delete temp;
         temp = temp2;
     }
+    head = NULL;
     currentSize = 0;
 }
 

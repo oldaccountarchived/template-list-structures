@@ -1,0 +1,4 @@
+catch.hpp
+a.out*
+tests
+*.o

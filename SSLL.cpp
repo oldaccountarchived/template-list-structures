@@ -1,5 +1,6 @@
 #include "SSLL.hpp"
 #include <exception>
+#include <sstream>
 
 using namespace cop3530;
 
@@ -12,18 +13,12 @@ SSLL<T>::SSLL() {
 
 template <typename T>
 SSLL<T>::SSLL( const SSLL& src ) {
-    // SOMEDAY, SOMEHOW
-    // I'M GONNA IMPLEMENT THIS
-    // BUT NOT RIGHT NOW
+    
 }
 
 template <typename T>
 SSLL<T>::~SSLL() {
-    // clear();
-    // head = NULL;
-    // tail = NULL;
-    // delete head;
-    // delete tail;
+    clear();
 }
 
 template <typename T>
@@ -194,6 +189,8 @@ void SSLL<T>::clear() {
         temp = temp2;
         --listSize;
     }
+    head = NULL;
+    tail = NULL;
 }
 
 template <typename T>
@@ -209,11 +206,12 @@ bool SSLL<T>::contains( const T& element,
 
 template <typename T>
 std::ostream& SSLL<T>::print( std::ostream& out ) const {
-    // Node* temp = head;
-    // ostringstream ostr;
-    // for (int i = 0; i != position; i++) {
-    //     ostr << temp->value << " ";
-    //     temp = temp->next;
-    // }
-    // return ost
+    Node* temp = head;
+    std::stringstream string;
+    for (int i = 0; i != listSize; i++) {
+        string << temp->value << " ";
+        temp = temp->next;
+    }
+    out << string.str();
+    return out;
 }

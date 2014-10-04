@@ -22,7 +22,7 @@ PSLL<T>::PSLL( const PSLL& src ) {
 
 template <typename T>
 PSLL<T>::~PSLL() {
-
+    clear();
 }
 
 template <typename T>
@@ -280,6 +280,8 @@ void PSLL<T>::clear() {
         temp = temp2;
         --listSize;
     }
+    head = NULL;
+    tail = NULL;
 }
 
 template <typename T>

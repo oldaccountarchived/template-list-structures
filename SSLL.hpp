@@ -1,4 +1,5 @@
 #include <ostream>
+#include <iterator>
 
 namespace cop3530 {
     template <typename T>
@@ -26,6 +27,105 @@ namespace cop3530 {
         int listSize;
     
     public:
+        
+        // Non const iterator.
+        class SSLL_Iter //: public std::iterator<std::forward_iterator_tag, T>
+        {
+        public:
+            // inheriting from std::iterator<std::forward_iterator_tag, T>
+            // automagically sets up these typedefs...
+            typedef T value_type;
+            typedef std::ptrdiff_t difference_type;
+            typedef T& reference;
+            typedef T* pointer;
+            typedef std::forward_iterator_tag iterator_category;
+      
+            // but not these typedefs...
+            typedef SSLL_Iter self_type;
+            typedef SSLL_Iter& self_reference;
+      
+        private:
+            Node* here;
+      
+        public:
+            explicit SSLL_Iter( Node* start = NULL ) : here( start ) {}
+            SSLL_Iter( const SSLL_Iter& src ) : here( src.here ) {}
+       
+            reference operator*() const {
+                return here->value;
+            }
+            pointer operator->() const {
+                return &here->value;
+            }
+      
+            self_reference operator=( const SSLL_Iter& src ) {
+                *this = SSLL_Iter( src );
+                return *this;
+            }
+
+            self_reference operator++() {
+                here = here->next;
+                return *this;
+            } // preincrement
+            
+            self_type operator++(int) {
+                SSLL_Iter* result = new SSLL_Iter( *this );
+                here = here->next;
+                return result;
+            } // postincrement
+
+            bool operator==(const SSLL_Iter& rhs) const {
+                return here != rhs.here;
+            }
+            
+            bool operator!=(const SSLL_Iter& rhs) const {
+                return here != rhs.here;
+            }
+        }; // end SSLL_Iter 
+
+        class SSLL_Const_Iter //: public std::iterator<std::forward_iterator_tag, T>
+        {
+        public:
+            // inheriting from std::iterator<std::forward_iterator_tag, T>
+            // automagically sets up these typedefs...
+            typedef T value_type;
+            typedef std::ptrdiff_t difference_type;
+            typedef const T& reference;
+            typedef const T* pointer; 
+            typedef std::forward_iterator_tag iterator_category;
+      
+            // but not these typedefs...
+            typedef SSLL_Iter self_type;
+            typedef SSLL_Iter& self_reference;
+      
+        private:
+            const Node* here;
+      
+        public:
+            explicit SSLL_Const_Iter( Node* start = NULL ) : here( start ) {}
+            SSLL_Const_Iter( const SSLL_Iter& src ) : here( src.here ) {}
+       
+            reference operator*() const {}
+            pointer operator->() const {}
+      
+            self_reference operator=( const SSLL_Iter& src ) {}
+
+            self_reference operator++() {} // preincrement
+            self_type operator++(int) {} // postincrement
+
+            bool operator==(const SSLL_Iter& rhs) const {}
+            bool operator!=(const SSLL_Iter& rhs) const {}
+        }; // end SSLL_Iter 
+
+        typedef std::size_t size_t;
+        typedef T value_type;
+        typedef SSLL_Iter iterator;
+        typedef SSLL_Const_Iter const_iterator; 
+        iterator begin() { return SSLL_Iter( head ); }
+        iterator end() { return SSLL_Iter(); }
+        const_iterator begin() const { return SSLL_Const_Iter( head ); }
+        const_iterator end() const { return SSLL_Const_Iter(); } 
+ 
         SSLL();
         SSLL( const SSLL& src );
         ~SSLL();

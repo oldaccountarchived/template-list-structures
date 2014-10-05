@@ -55,7 +55,8 @@ namespace cop3530 {
                 return here->value;
             }
             pointer operator->() const {
-                return &here->value;
+                T* temp = &here->value;
+                return temp;
             }
       
             self_reference operator=( const SSLL_Iter& src ) {
@@ -75,11 +76,11 @@ namespace cop3530 {
             } // postincrement
 
             bool operator==(const SSLL_Iter& rhs) const {
-                return here != rhs.here;
+                return here->value != rhs.here->value;
             }
             
             bool operator!=(const SSLL_Iter& rhs) const {
-                return here != rhs.here;
+                return here->value != rhs.here->value;
             }
         }; // end SSLL_Iter 
 
@@ -105,16 +106,38 @@ namespace cop3530 {
             explicit SSLL_Const_Iter( Node* start = NULL ) : here( start ) {}
             SSLL_Const_Iter( const SSLL_Iter& src ) : here( src.here ) {}
        
-            reference operator*() const {}
-            pointer operator->() const {}
+            reference operator*() const {
+                return here->value;
+            }
+            
+            pointer operator->() const {
+                T* temp = &here->value;
+                return temp;
+            }
       
-            self_reference operator=( const SSLL_Iter& src ) {}
+            self_reference operator=( const SSLL_Iter& src ) {
+               *this = SSLL_Iter( src );
+               return *this;
+            }
 
-            self_reference operator++() {} // preincrement
-            self_type operator++(int) {} // postincrement
+            self_reference operator++() {
+                here = here->next;
+                return *this;
+            } // preincrement
+            
+            self_type operator++(int) {
+                SSLL_Iter* result = new SSLL_Iter( *this );
+                here = here->next;
+                return result;
+            } // postincrement
 
-            bool operator==(const SSLL_Iter& rhs) const {}
-            bool operator!=(const SSLL_Iter& rhs) const {}
+            bool operator==(const SSLL_Iter& rhs) const {
+                return here->value == rhs.here->value;
+            }
+            
+            bool operator!=(const SSLL_Iter& rhs) const {
+                return here->value != rhs.here->value;
+            }
         }; // end SSLL_Iter 
 
         typedef std::size_t size_t;

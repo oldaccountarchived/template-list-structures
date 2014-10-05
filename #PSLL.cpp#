@@ -85,7 +85,7 @@ void PSLL<T>::push_front( const T& element ) {
             poolHead->value = element;
             this->head = poolHead;
             this->tail = poolHead;
-            poolSize--;
+            --poolSize;
             if (poolSize == 0) {
                 poolHead = NULL;
             } else {

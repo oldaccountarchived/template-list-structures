@@ -1,4 +1,5 @@
 #include "SDAL.hpp"
+#include <iostream>
 
 using namespace cop3530;
 
@@ -28,7 +29,7 @@ SDAL<T>::~SDAL() {
 template <typename T>
 void SDAL<T>::resizeList() {
     if (maxSize >= 100 && maxSize / currentSize > 2) {
-        T temp[maxSize / 2];
+        T* temp = new T[maxSize / 2];
         for ( int i = 0; i != currentSize; ++i ) {
             temp[i] = list[i];
         }
@@ -48,7 +49,7 @@ T SDAL<T>::replace( const T& element, int position ) {
 template <typename T>
 void SDAL<T>::insert( const T& element, int position ) {
     if ( currentSize == maxSize ) {
-        T temp[(int) (maxSize * 1.5)];
+        T* temp = new T[(int) (maxSize * 1.5)];
         for ( int i = 0; i != currentSize; ++i ) {
             temp[i] = list[i];
         }
@@ -66,7 +67,7 @@ void SDAL<T>::insert( const T& element, int position ) {
 template <typename T>
 void SDAL<T>::push_front( const T& element ) {
     if ( currentSize == maxSize ) {
-        T temp[(int) (maxSize * 1.5)];
+        T* temp = new T[(int) (maxSize * 1.5)];
         for ( int i = 0; i != currentSize; ++i ) {
             temp[i] = list[i];
         }
@@ -83,8 +84,9 @@ void SDAL<T>::push_front( const T& element ) {
 
 template <typename T>
 void SDAL<T>::push_back( const T& element ) {
+    std::cout << currentSize << " " << maxSize << std::endl;
     if ( currentSize == maxSize ) {
-        T temp[(int) (maxSize * 1.5)];
+        T* temp = new T[(int) (maxSize * 1.5)];
         for ( int i = 0; i != currentSize; ++i ) {
             temp[i] = list[i];
         }

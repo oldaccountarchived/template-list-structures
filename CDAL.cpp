@@ -1,5 +1,6 @@
 #include "CDAL.hpp"
 #include <exception>
+#include <iostream>
 
 using namespace cop3530;
 
@@ -18,6 +19,7 @@ CDAL<T>::CDAL( const CDAL& src ) {
 template <typename T>
 CDAL<T>::~CDAL() {
     clear();
+    delete head;
 }
 
 template <typename T>
@@ -81,7 +83,7 @@ void CDAL<T>::insert( const T& element, int position ) {
 
 template <typename T>
 void CDAL<T>::push_front( const T& element ) {
-    if (currentSize > 0) {
+    if (currentSize > 1) {
         T nextVal;
         T nextNextVal;
         Node* temp = head;
@@ -94,21 +96,30 @@ void CDAL<T>::push_front( const T& element ) {
         temp->list[0] = element;
         // Re-order the remaining elements.
         for ( int i = 2; i <= currentSize; ++i ) {
-            if ( currentNode < (i)/50 ) { // Check if the index is past the current node.
+            if ( currentNode < i/50 ) { // Check if the index is past the current node.
                 ++currentNode; // If it is, increment the current node.
                 if ( temp->next == NULL ) {
                     // Make a new node if one isn't there!
                     temp->next = new Node();
+                    maxSize += 50;
                 }
                 temp = temp->next; // And set the temp node to that node.
             }
-            nextNextVal = temp->list[i];
-            temp->list[i] = nextVal;
+            nextNextVal = temp->list[i % 50];
+            temp->list[i % 50] = nextVal;
             nextVal = nextNextVal;
         }
+        temp = NULL;
         ++currentSize;
-    }
-    else {
+    } else if ( currentSize == 1 ) {
+        head->list[1] = head->list[0];
+        // Push element to the front
+        head->list[0] = element;
+        ++currentSize;
+    } else {
+        if (head == NULL) {
+            head = new Node();
+        }
         head->list[0] = element;
         ++currentSize;
     }
@@ -144,15 +155,15 @@ T CDAL<T>::pop_front() {
     if ( currentSize != 0 ) {
         T val = head->list[0];
         Node* temp = head;
+        int currentNode = 0; // We start at the first node.
         for ( int i = 0; i < currentSize - 1; ++i ) {
-            int currentNode = 0; // We start at the first node.
-            if ( currentNode < i/50 ) { // Check if the index is past the current node.
+            if ( currentNode < i / 50 ) { // Check if the index is past the current node.
                 ++currentNode; // If it is, increment the current node.
                 temp = temp->next; // And set the temp node to that node.
             }
-            if ((i + 1)/50 > i/50) { // Deals with the case where i + 1 is in the next node.
+            if ((i + 1)/50 > i / 50) { // Deals with the case where i + 1 is in the next node.
                 temp->list[i % 50] = temp->next->list[(i + 1) % 50];
-            } else { 
+            } else {
                 temp->list[i % 50] = temp->list[(i + 1) % 50];
             }
         }
@@ -252,8 +263,9 @@ void CDAL<T>::clear() {
         delete temp;
         temp = temp2;
     }
-    head = NULL;
+    head = new Node();
     currentSize = 0;
+    maxSize = 50;
 }
 
 template <typename T>
@@ -269,4 +281,5 @@ bool CDAL<T>::contains( const T& element,
 
 template <typename T>
 std::ostream& CDAL<T>::print( std::ostream& out ) const {
+
 }

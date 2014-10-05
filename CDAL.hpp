@@ -14,7 +14,7 @@ namespace cop3530 {
                 this->next = NULL;
             }
         };
-        Node* head; 
+        Node* head;
         int maxSize; // Max number of elements CDAL can hold before adding 
                      // a new Array.
         int currentSize; // Current number of elements in CDAL.
@@ -45,6 +45,7 @@ namespace cop3530 {
             explicit CDAL_Iter( Node* start = NULL ) : here( start ) { 
                 this->position = 0; 
             }
+            
             CDAL_Iter( const CDAL_Iter& src ) : here( src.here ) { 
                 this->position = src.position; 
             }
@@ -152,7 +153,7 @@ namespace cop3530 {
         typedef CDAL_Iter iterator;
         typedef CDAL_Const_Iter const_iterator; 
         iterator begin() { return CDAL_Iter( head ); }
-        iterator end() { return CDAL_Iter(); }
+        iterator end() { return CDAL_Iter( NULL ); }
         const_iterator begin() const { return CDAL_Const_Iter( head ); }
         const_iterator end() const { return CDAL_Const_Iter(); } 
         // CDAL Memeber functions.

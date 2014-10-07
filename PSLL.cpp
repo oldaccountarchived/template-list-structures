@@ -1,5 +1,5 @@
 #include "PSLL.hpp"
-#include <exception>
+#include <stdexcept>
 #include <sstream>
 
 using namespace cop3530;
@@ -22,8 +22,8 @@ PSLL<T>::PSLL( const PSLL& src ) {
 
 template <typename T>
 PSLL<T>::~PSLL() {
-    clear();
-    poolHead = NULL;
+    // clear();
+    // poolHead = NULL;
 }
 
 template <typename T>
@@ -85,7 +85,7 @@ void PSLL<T>::push_front( const T& element ) {
             poolHead->value = element;
             this->head = poolHead;
             this->tail = poolHead;
-            poolSize--;
+            --poolSize;
             if (poolSize == 0) {
                 poolHead = NULL;
             } else {
@@ -277,7 +277,8 @@ void PSLL<T>::clear() {
     Node* temp2;
     while (temp != NULL) {
         temp2 = temp->next;
-        delete temp;
+        temp->next = poolHead;
+        poolHead = temp;
         temp = temp2;
         --listSize;
     }

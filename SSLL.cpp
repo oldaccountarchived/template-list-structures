@@ -1,5 +1,5 @@
 #include "SSLL.hpp"
-#include <exception>
+#include <stdexcept>
 #include <sstream>
 
 using namespace cop3530;

@@ -1,5 +1,6 @@
 #include "SDAL.hpp"
 #include <iostream>
+#include <stdexcept>
 
 using namespace cop3530;
 

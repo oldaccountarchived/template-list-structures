@@ -4,6 +4,7 @@
 
 using namespace cop3530;
 
+// List constructor
 template <typename T>
 PSLL<T>::PSLL() {
     this->head = NULL;
@@ -13,6 +14,7 @@ PSLL<T>::PSLL() {
     listSize = 0;
 }
 
+// List copy constructor
 template <typename T>
 PSLL<T>::PSLL( const PSLL& src ) {
     // SOMEDAY, SOMEHOW
@@ -20,12 +22,15 @@ PSLL<T>::PSLL( const PSLL& src ) {
     // BUT NOT RIGHT NOW
 }
 
+// List deconstructor
 template <typename T>
 PSLL<T>::~PSLL() {
     // clear();
     // poolHead = NULL;
 }
 
+// This function replaces an element at a given position with a user passed in
+// element. The element that was at the position previously is returned.
 template <typename T>
 T PSLL<T>::replace( const T& element, int position ) {
     // Probably not correct!
@@ -42,6 +47,9 @@ T PSLL<T>::replace( const T& element, int position ) {
     }
 }
 
+// This function inserts a user passed element at a given position. The function
+// does not return anything but does modify the list. The size of the list is
+// increased by one upon function completion.
 template <typename T>
 void PSLL<T>::insert( const T& element, int position ) {
     if ( position == listSize ){ 
@@ -75,6 +83,9 @@ void PSLL<T>::insert( const T& element, int position ) {
     }
 }
 
+// This function inserts an element at the very front of the list. It does not
+// return anything. The size of the list is increased by one upon function
+// completion.
 template <typename T>
 void PSLL<T>::push_front( const T& element ) {
     if (listSize == 0) {
@@ -112,6 +123,9 @@ void PSLL<T>::push_front( const T& element ) {
     listSize++;
 }
 
+// This function inserts an element at the rear of the list. It does not
+// return anything. The size of the list is increased by one upon function
+// completion.
 template <typename T>
 void PSLL<T>::push_back( const T& element ) {
     if (listSize == 0) {
@@ -150,6 +164,8 @@ void PSLL<T>::push_back( const T& element ) {
     listSize++;
 }
 
+// This function removes the frontmost element from the list and returns it for
+// use. The size of the list is reduced by 1 upon function completion.
 template <typename T>
 T PSLL<T>::pop_front() {
     if (listSize != 0) {
@@ -171,6 +187,8 @@ T PSLL<T>::pop_front() {
     }
 }
 
+// This function removes the rear element from the list and returns it for
+// use. The size of the list is reduced by 1 upon function completion.
 template <typename T>
 T PSLL<T>::pop_back() {
     if (listSize != 0) {
@@ -213,6 +231,9 @@ T PSLL<T>::pop_back() {
     }
 }
 
+// This function removes an element from the list at a user specified position
+// and returns it for use. The size of the list is reduced by 1 upon function
+// completion.
 template <typename T>
 T PSLL<T>::remove( int position ) {
     if ( position < listSize ) { 
@@ -246,6 +267,9 @@ T PSLL<T>::remove( int position ) {
     }
 }
 
+// This function returns the value of an element at user-specified position
+// without removing it from the list. The list will not be modified as a result
+// of this function being called.
 template <typename T>
 T PSLL<T>::item_at( int position ) const {
     Node* temp = head;
@@ -256,6 +280,7 @@ T PSLL<T>::item_at( int position ) const {
     return value;
 }
 
+// This function returns true if the list is empty and false otherwise.
 template <typename T>
 bool PSLL<T>::is_empty() const {
     if (listSize == 0) {
@@ -265,14 +290,16 @@ bool PSLL<T>::is_empty() const {
     }
 }
 
+// This function returns the size of the list.
 template <typename T>
 int PSLL<T>::size() const {
     return listSize;
 }
 
+// This function clears the list, moves the nodes of the list to the pool, and
+// sets the number of elements to 0.
 template <typename T>
 void PSLL<T>::clear() {
-    // TODO: Instead this should add nodes to the head.
     Node* temp = head;
     Node* temp2;
     while (temp != NULL) {
@@ -286,6 +313,8 @@ void PSLL<T>::clear() {
     tail = NULL;
 }
 
+// This function takes an element and a comparison function as parameters and
+// checks to see if the user-specified element is contained in the list.
 template <typename T>
 bool PSLL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
@@ -297,6 +326,8 @@ bool PSLL<T>::contains( const T& element,
     return false;
 }
 
+// This function creates a stream for printing the contents of the list
+// structure.
 template <typename T>
 std::ostream& PSLL<T>::print( std::ostream& out ) const {
     Node* temp = head;

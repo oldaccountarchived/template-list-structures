@@ -148,15 +148,10 @@ TEST_CASE ( "PSLL tests are done now!", "[PSLL]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_front(i * 5);
         }
-        std::cout << "lol6" << std::endl;
-
         list1.insert( 3, 0 );
         list1.insert( 4, 1 );
         list1.insert( 5, 1 );
-
         list1.insert( 42, 49 );
-        std::cout << "lol1" << std::endl;
-
         REQUIRE( list1.pop_front() == 3 ); 
         REQUIRE( list1.pop_front() == 5 );
         REQUIRE( list1.pop_front() == 4 );
@@ -177,7 +172,6 @@ TEST_CASE ( "SDAL tests are done now!", "[SDAL]" ) {
     SECTION ( "Test pop_front.", "[pop_front]" ) { 
         for (int i = 0; i < 200; i++) {
             list1.push_back(i * 5);
-            std::cout << i << std::endl;
         }
         REQUIRE(list1.pop_front() == 0);
         REQUIRE(list1.pop_front() == 5);
@@ -300,12 +294,9 @@ TEST_CASE ( "CDAL tests are done now!", "[CDAL]" ) {
         REQUIRE( list1.remove(50) == 250 );
         REQUIRE( list1.remove(50) == 255 ); 
         list1.clear();
-        std::cout << "live 1" << std::endl;
         for (int i = 0; i < 200; i++) {
-            std::cout << i << std::endl;
             list1.push_front(i * 5);
         }
-        std::cout << "live 2" << std::endl;
         // Reverse order now, just to make sure pop_front is working!
         REQUIRE( list1.remove(50) == 745 );
         REQUIRE( list1.remove(1) == 990 );
@@ -316,25 +307,24 @@ TEST_CASE ( "CDAL tests are done now!", "[CDAL]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_front(i * 5);
         }
-        
         list1.insert( 3, 0 );
         list1.insert( 4, 1 );
         list1.insert( 5, 1 );
         list1.insert( 42, 49 );
-        for (int i = 0; i < 200; i++) {
-            std::cout << list1.item_at(i) << std::endl;
-        }
+        list1.insert( 943, 77 );
+        list1.insert( 222, 99 );
+        
         REQUIRE( list1.pop_front() == 3 ); 
         REQUIRE( list1.pop_front() == 5 );
         REQUIRE( list1.pop_front() == 4 );
         REQUIRE( list1.remove(46) == 42 );
-        std::cout << "testing" << std::endl;
+        REQUIRE( list1.remove(73) == 943 );
+        REQUIRE( list1.remove(94) == 222 );
     }
     SECTION ( "Test clear", "[clear]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_front(i * 5);
         }
-        std::cout << "done!" << std::endl;
         REQUIRE( list1.size() == 200 );
         list1.clear();
         REQUIRE( list1.size() == 0 );

@@ -51,14 +51,22 @@ void CDAL<T>::insert( const T& element, int position ) {
         T nextNextVal;
         Node* temp = head;
         int currentNode = position / 50;
-        // Get to the right node first...
+        // Get to the correct node first...
         for (int i = 0; i != currentNode; ++i) {
             temp = temp->next;
         }
         // Move the element at the position to position + 1 and store what's in position + 1
         // in a temporary variable.
-        nextVal = temp->list[(position + 1) % 50];
-        temp->list[(position + 1) % 50] = temp->list[position % 50];
+
+        // FIXME: This isn't handling the case when position + 1 is in the next list.
+
+        if ((position + 1) / 50 > currentNode) {
+            nextVal = temp->next->list[(position + 1) % 50];
+            temp->next->list[(position + 1) % 50] = temp->list[position % 50];  
+        } else {
+            nextVal = temp->list[(position + 1) % 50];
+            temp->list[(position + 1) % 50] = temp->list[position % 50];
+        }
         // Push element to the front
         temp->list[position % 50] = element;
         // Re-order the remaining elements.

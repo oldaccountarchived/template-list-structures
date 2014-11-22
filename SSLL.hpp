@@ -1,5 +1,6 @@
 #include <ostream>
 #include <iterator>
+#include <cstddef>
 
 namespace cop3530 {
     template <typename T>
@@ -11,14 +12,14 @@ namespace cop3530 {
         
             // Node with no arguments!
             Node() {
-                this->value = NULL;
-                this->value = NULL;
+                this->value = nullptr;
+                this->value = nullptr;
             }
         
             // For creating nodes with values.
             Node( T value ) {
                 this->value = value;
-                this->next = NULL;
+                this->next = nullptr;
             }
         };
         Node* head; 
@@ -48,7 +49,7 @@ namespace cop3530 {
             Node* here;
       
         public:
-            explicit SSLL_Iter( Node* start = NULL ) : here( start ) {}
+            explicit SSLL_Iter( Node* start = nullptr ) : here( start ) {}
             SSLL_Iter( const SSLL_Iter& src ) : here( src.here ) {}
        
             reference operator*() const {
@@ -103,7 +104,7 @@ namespace cop3530 {
             const Node* here;
       
         public:
-            explicit SSLL_Const_Iter( Node* start = NULL ) : here( start ) {}
+            explicit SSLL_Const_Iter( Node* start = nullptr ) : here( start ) {}
             SSLL_Const_Iter( const SSLL_Iter& src ) : here( src.here ) {}
        
             reference operator*() const {

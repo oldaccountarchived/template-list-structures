@@ -1,4 +1,5 @@
 #include <ostream>
+#include <cstddef>
 
 namespace cop3530 {
     template <typename T>
@@ -31,7 +32,7 @@ namespace cop3530 {
         //     Node* here;
       
         // public:
-        //     explicit SDAL_Iter( Node* start = NULL ) : here( start ) {}
+        //     explicit SDAL_Iter( Node* start = nullptr ) : here( start ) {}
         //     SDAL_Iter( const SDAL_Iter& src ) : here( src.here ) {}
        
         //     reference operator*() const {
@@ -67,7 +68,7 @@ namespace cop3530 {
         //     const Node* here;
       
         // public:
-        //     explicit SDAL_Const_Iter( Node* start = NULL ) : here( start ) {}
+        //     explicit SDAL_Const_Iter( Node* start = nullptr ) : here( start ) {}
         //     SDAL_Const_Iter( const SDAL_Iter& src ) : here( src.here ) {}
        
         //     reference operator*() const {}

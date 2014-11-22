@@ -33,7 +33,7 @@ T CDAL<T>::replace( const T& element, int position ) {
         }
         T val = temp->list[pos];
         temp->list[pos] = element;
-        temp = NULL;
+        temp = nullptr;
         return val;
     } else {
         throw std::domain_error("Position does not exist \"Too Large\"");
@@ -57,9 +57,6 @@ void CDAL<T>::insert( const T& element, int position ) {
         }
         // Move the element at the position to position + 1 and store what's in position + 1
         // in a temporary variable.
-
-        // FIXME: This isn't handling the case when position + 1 is in the next list.
-
         if ((position + 1) / 50 > currentNode) {
             nextVal = temp->next->list[(position + 1) % 50];
             temp->next->list[(position + 1) % 50] = temp->list[position % 50];  
@@ -73,7 +70,7 @@ void CDAL<T>::insert( const T& element, int position ) {
         for ( int i = position + 2; i <= currentSize; ++i ) {
             if ( currentNode < (i / 50) ) { // Check if the index is past the current node.
                 ++currentNode; // If it is, increment the current node.
-                if ( temp->next == NULL ) {
+                if ( temp->next == nullptr ) {
                     // Make a new node if one isn't there!
                     temp->next = new Node();
                 }
@@ -106,7 +103,7 @@ void CDAL<T>::push_front( const T& element ) {
         for ( int i = 2; i <= currentSize; ++i ) {
             if ( currentNode < i/50 ) { // Check if the index is past the current node.
                 ++currentNode; // If it is, increment the current node.
-                if ( temp->next == NULL ) {
+                if ( temp->next == nullptr ) {
                     // Make a new node if one isn't there!
                     temp->next = new Node();
                     maxSize += 50;
@@ -117,7 +114,7 @@ void CDAL<T>::push_front( const T& element ) {
             temp->list[i % 50] = nextVal;
             nextVal = nextNextVal;
         }
-        temp = NULL;
+        temp = nullptr;
         ++currentSize;
     } else if ( currentSize == 1 ) {
         head->list[1] = head->list[0];
@@ -125,7 +122,7 @@ void CDAL<T>::push_front( const T& element ) {
         head->list[0] = element;
         ++currentSize;
     } else {
-        if (head == NULL) {
+        if (head == nullptr) {
             head = new Node();
         }
         head->list[0] = element;
@@ -139,13 +136,13 @@ void CDAL<T>::push_back( const T& element ) {
     int counter = (currentSize / 50);
     if ( currentSize >= maxSize ) {
         for (int i = 0; i != counter; i++) {
-            if (temp->next == NULL) {
+            if (temp->next == nullptr) {
                 temp->next = new Node();
             }
             temp = temp->next;
         } 
         maxSize += 50;
-        temp = NULL;
+        temp = nullptr;
     } 
     int pos = (currentSize % 50); // Tells us where the data is in that array.
     // counter = (currentSize) / 50; // Tells us which array the data is in.
@@ -154,7 +151,7 @@ void CDAL<T>::push_back( const T& element ) {
         temp = temp->next;
     }
     temp->list[pos] = element;
-    temp = NULL;
+    temp = nullptr;
     ++currentSize;
 }
 
@@ -192,7 +189,7 @@ T CDAL<T>::pop_back() {
             temp = temp->next;
         }
         T val = temp->list[pos];
-        temp = NULL;
+        temp = nullptr;
         --currentSize;
         return val;
     } else {
@@ -241,7 +238,7 @@ T CDAL<T>::item_at( int position ) const {
             temp = temp->next;
         }
         T val = temp->list[pos];
-        temp = NULL;
+        temp = nullptr;
         return val;
     } else {
         throw std::domain_error("Position does not exist \"Too Large\"");
@@ -265,7 +262,7 @@ template <typename T>
 void CDAL<T>::clear() {
     Node* temp = head;
     Node* temp2;
-    while (temp != NULL) {
+    while (temp != nullptr) {
         temp2 = temp->next;
         delete[] temp->list;
         delete temp;
@@ -289,5 +286,5 @@ bool CDAL<T>::contains( const T& element,
 
 template <typename T>
 std::ostream& CDAL<T>::print( std::ostream& out ) const {
-
+    out << "lol";
 }

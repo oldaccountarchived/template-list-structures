@@ -7,9 +7,9 @@ using namespace cop3530;
 // List constructor
 template <typename T>
 PSLL<T>::PSLL() {
-    this->head = NULL;
-    this->tail = NULL;
-    this->poolHead = NULL;
+    this->head = nullptr;
+    this->tail = nullptr;
+    this->poolHead = nullptr;
     poolSize = 0;
     listSize = 0;
 }
@@ -26,7 +26,7 @@ PSLL<T>::PSLL( const PSLL& src ) {
 template <typename T>
 PSLL<T>::~PSLL() {
     // clear();
-    // poolHead = NULL;
+    // poolHead = nullptr;
 }
 
 // This function replaces an element at a given position with a user passed in
@@ -71,7 +71,7 @@ void PSLL<T>::insert( const T& element, int position ) {
             temp->next->value = element;
             --poolSize;
             if ( poolSize == 0 ) {
-                poolHead = NULL;
+                poolHead = nullptr;
             } else {
                 poolHead = poolHead->next;
             }
@@ -98,7 +98,7 @@ void PSLL<T>::push_front( const T& element ) {
             this->tail = poolHead;
             --poolSize;
             if (poolSize == 0) {
-                poolHead = NULL;
+                poolHead = nullptr;
             } else {
                 poolHead = poolHead->next;
             }
@@ -114,7 +114,7 @@ void PSLL<T>::push_front( const T& element ) {
             head = poolHead;
             --poolSize;
             if (poolSize == 0) {
-                poolHead = NULL;
+                poolHead = nullptr;
             } else {
                 poolHead = poolHead->next;
             }
@@ -139,7 +139,7 @@ void PSLL<T>::push_back( const T& element ) {
             this->tail = head;
             --poolSize;
             if (poolSize == 0) {
-                poolHead = NULL;
+                poolHead = nullptr;
             } else {
                 poolHead = poolHead->next;
             }
@@ -155,7 +155,7 @@ void PSLL<T>::push_back( const T& element ) {
             tail = poolHead;
             --poolSize;
             if (poolSize == 0) {
-                poolHead = NULL;
+                poolHead = nullptr;
             } else {
                 poolHead = poolHead->next;
             }
@@ -202,8 +202,8 @@ T PSLL<T>::pop_back() {
                 poolHead = head;
             }
             ++poolSize;
-            head = NULL;
-            tail = NULL;
+            head = nullptr;
+            tail = nullptr;
         } else {
             // Go down the list until we reach the element before the tail.
             Node* temp = head;
@@ -220,7 +220,7 @@ T PSLL<T>::pop_back() {
                 poolHead = temp->next;
             }
             ++poolSize;
-            temp->next = NULL;
+            temp->next = nullptr;
             tail = temp;
         }
         -- listSize;
@@ -258,7 +258,7 @@ T PSLL<T>::remove( int position ) {
                 poolHead = temp2;
             }
             ++poolSize;
-            temp2 = NULL;
+            temp2 = nullptr;
             --listSize;
             return val;
         }
@@ -302,15 +302,15 @@ template <typename T>
 void PSLL<T>::clear() {
     Node* temp = head;
     Node* temp2;
-    while (temp != NULL) {
+    while (temp != nullptr) {
         temp2 = temp->next;
         temp->next = poolHead;
         poolHead = temp;
         temp = temp2;
         --listSize;
     }
-    head = NULL;
-    tail = NULL;
+    head = nullptr;
+    tail = nullptr;
 }
 
 // This function takes an element and a comparison function as parameters and

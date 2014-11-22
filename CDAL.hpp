@@ -1,4 +1,6 @@
 #include <ostream>
+#include <iterator>
+#include <cstddef>
 
 namespace cop3530 {
     template <typename T>
@@ -11,7 +13,7 @@ namespace cop3530 {
         
             Node() {
                 this->list = new T[50];
-                this->next = NULL;
+                this->next = nullptr;
             }
         };
         Node* head;
@@ -42,7 +44,10 @@ namespace cop3530 {
             Node* here;
       
         public:
-            explicit CDAL_Iter( Node* start = NULL ) : here( start ) { 
+            explicit CDAL_Iter( Node* start = nullptr ) : here( start ) { 
+                if (start == nullptr) {
+                    this->position = 0;
+                }
                 this->position = 0; 
             }
             
@@ -70,6 +75,7 @@ namespace cop3530 {
                 position++;
                 return this;
             } // preincrement
+
             self_type operator++(int) {
                 auto temp = CDAL_Iter( this );
                 if ((position / 50) > ((position - 1) / 50)) {
@@ -103,11 +109,11 @@ namespace cop3530 {
             typedef CDAL_Iter& self_reference;
       
         private:
-            const int position;
+            int position;
             const Node* here;
       
         public:
-            explicit CDAL_Const_Iter( Node* start = NULL ) : here( start ) { 
+            explicit CDAL_Const_Iter( Node* start = nullptr ) : here( start ) { 
                 this->position = 0; 
             }
             CDAL_Const_Iter( const CDAL_Iter& src ) : here( src.here ) {
@@ -132,7 +138,7 @@ namespace cop3530 {
                 return this;
             } // preincrement
             self_type operator++(int) {
-                auto temp = CDAL_Iter( this );
+                auto temp = CDAL_Const_Iter( this );
                 if ((position / 50) > ((position - 1) / 50)) {
                     here = here->next;
                 }
@@ -140,11 +146,13 @@ namespace cop3530 {
                 return temp;
             } // postincrement
 
-            bool operator==(const CDAL_Iter& rhs) const {
-                return this == rhs;
+            bool operator==(const CDAL_Const_Iter& rhs) const {
+                return this->here->item_at(position % 50) == 
+                    rhs->here->item_at(position % 50);
             }
-            bool operator!=(const CDAL_Iter& rhs) const {
-                return this != rhs;
+            bool operator!=(const CDAL_Const_Iter& rhs) const {
+                return this->here->item_at(position % 50) != 
+                    rhs->here->item_at(position % 50);            
             }
         }; // end CDAL_Iter 
 
@@ -152,8 +160,8 @@ namespace cop3530 {
         typedef T value_type;
         typedef CDAL_Iter iterator;
         typedef CDAL_Const_Iter const_iterator; 
-        iterator begin() { return CDAL_Iter( head ); }
-        iterator end() { return CDAL_Iter( NULL ); }
+        iterator begin() { return CDAL_Iter( head, 0 ); }
+        iterator end() { return CDAL_Iter( nullptr, size() ); }
         const_iterator begin() const { return CDAL_Const_Iter( head ); }
         const_iterator end() const { return CDAL_Const_Iter(); } 
         // CDAL Memeber functions.

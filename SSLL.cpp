@@ -7,8 +7,8 @@ using namespace cop3530;
 // List constructor
 template <typename T>
 SSLL<T>::SSLL() {
-    this->head = NULL;
-    this->tail = NULL;
+    this->head = nullptr;
+    this->tail = nullptr;
     listSize = 0;
 }
 
@@ -122,8 +122,8 @@ T SSLL<T>::pop_back() {
         if (listSize == 1) {
             val = head->value;
             delete head;
-            head = NULL;
-            tail = NULL;
+            head = nullptr;
+            tail = nullptr;
         } else {
             // Go down the list until we reach the element before the tail.
             Node* temp = head;
@@ -134,7 +134,7 @@ T SSLL<T>::pop_back() {
             // node the new tail.
             val = temp->next->value;
             delete temp->next;
-            temp->next = NULL;
+            temp->next = nullptr;
             tail = temp;
         }
         listSize--;
@@ -165,7 +165,7 @@ T SSLL<T>::remove( int position ) {
             temp->next = temp->next->next;
             val = temp2->value;
             delete temp2;
-            temp2 = NULL;
+            temp2 = nullptr;
             --listSize;
             return val;
         }
@@ -208,14 +208,14 @@ template <typename T>
 void SSLL<T>::clear() {
     Node* temp = head;
     Node* temp2;
-    while (temp != NULL) {
+    while (temp != nullptr) {
         temp2 = temp->next;
         delete temp;
         temp = temp2;
         --listSize;
     }
-    head = NULL;
-    tail = NULL;
+    head = nullptr;
+    tail = nullptr;
 }
 
 // This function takes an element and a comparison function as parameters and

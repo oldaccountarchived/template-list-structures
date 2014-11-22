@@ -15,6 +15,13 @@ namespace cop3530 {
                 this->list = new T[50];
                 this->next = nullptr;
             }
+
+            Node( T* list ) {
+                this->list = new T[50];
+                for ( int i = 0; i != 50; ++i )
+                    this->list[i] = list[i];
+                this->next = nullptr;
+            }
         };
         Node* head;
         int maxSize; // Max number of elements CDAL can hold before adding 

@@ -201,4 +201,14 @@ bool SDAL<T>::contains( const T& element,
 // structure.
 template <typename T>
 std::ostream& SDAL<T>::print( std::ostream& out ) const {
+    out << "{";
+    for (int i = 0; i != currentSize; ++i) {
+        if ( i != currentSize - 1 ) {
+            out << list[i] << ", ";
+        } else {
+            out << list[i];
+        }
+    }
+    out << "}";
+    return out;
 }

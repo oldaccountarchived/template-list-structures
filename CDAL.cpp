@@ -13,7 +13,22 @@ CDAL<T>::CDAL() {
 
 template <typename T>
 CDAL<T>::CDAL( const CDAL& src ) {
-    // SOMEDAY
+    if ( src->head != nullptr ) {
+        Node* temp = src->head;
+        this->head = new Node( temp->list );
+        Node* temp2 = this->head;
+        while ( temp->next != nullptr ) {
+            temp2->next = new Node( temp->next->list );
+            temp = temp->next;
+            temp2 = temp2->next;
+        }
+        this->currentSize = src->currentSize;
+        this->max_size = src->max_size;
+    } else {
+        this->head = nullptr;
+        this->currentSize = 0;
+        this->max_size = 50;
+    }
 }
 
 template <typename T>
@@ -276,7 +291,7 @@ void CDAL<T>::clear() {
 template <typename T>
 bool CDAL<T>::contains( const T& element, 
                         bool equals( const T& a, const T& b  ) ) const {
-    for (int i = 0; i < currentSize; ++i) {
+    for (int i = 0; i != currentSize; ++i) {
         if (equals(item_at(i), element)) {
             return true;
         }
@@ -286,5 +301,18 @@ bool CDAL<T>::contains( const T& element,
 
 template <typename T>
 std::ostream& CDAL<T>::print( std::ostream& out ) const {
-    out << "lol";
+    out << "{";
+    Node* temp = head;
+    for (int i = 0; i != currentSize; ++i) {
+        if ( i / 50 > (i - 1) / 50 ) {
+            temp = temp->next;
+        }
+        if ( i != currentSize - 1 ) {
+            out << temp->list[i % 50] << ", ";
+        } else {
+            out << temp->list[i % 50];
+        }
+    }
+    out << "}";
+    return out;
 }

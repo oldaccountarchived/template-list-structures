@@ -77,7 +77,7 @@ namespace cop3530 {
             } // preincrement
 
             self_type operator++(int) {
-                auto temp = CDAL_Iter( this );
+                CDAL_Iter temp = CDAL_Iter( this );
                 if ((position / 50) > ((position - 1) / 50)) {
                     here = here->next;
                 }
@@ -138,7 +138,7 @@ namespace cop3530 {
                 return this;
             } // preincrement
             self_type operator++(int) {
-                auto temp = CDAL_Const_Iter( this );
+                CDAL_Const_Iter temp = CDAL_Const_Iter( this );
                 if ((position / 50) > ((position - 1) / 50)) {
                     here = here->next;
                 }

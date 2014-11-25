@@ -37,6 +37,8 @@ CDAL<T>::~CDAL() {
     delete head;
 }
 
+// This function replaces an element at a given position with a user passed in
+// element. The element that was at the position previously is returned.
 template <typename T>
 T CDAL<T>::replace( const T& element, int position ) {
     if ( position < currentSize ) {
@@ -55,6 +57,9 @@ T CDAL<T>::replace( const T& element, int position ) {
     }
 }
 
+// This function inserts a user passed element at a given position. The function
+// does not return anything but does modify the list. The size of the list is
+// increased by one upon function completion.
 template <typename T>
 void CDAL<T>::insert( const T& element, int position ) {
     if ( position == currentSize ) {
@@ -101,6 +106,9 @@ void CDAL<T>::insert( const T& element, int position ) {
     }
 }
 
+// This function inserts an element at the very front of the list. It does not
+// return anything. The size of the list is increased by one upon function
+// completion.
 template <typename T>
 void CDAL<T>::push_front( const T& element ) {
     if (currentSize > 1) {
@@ -145,6 +153,9 @@ void CDAL<T>::push_front( const T& element ) {
     }
 }
 
+// This function inserts an element at the rear of the list. It does not
+// return anything. The size of the list is increased by one upon function
+// completion.
 template <typename T>
 void CDAL<T>::push_back( const T& element ) {
     Node* temp = head;
@@ -263,13 +274,13 @@ T CDAL<T>::item_at( int position ) const {
 template <typename T>
 bool CDAL<T>::is_empty() const {
     if (currentSize == 0)
-        return false;
-    else 
         return true;
+    else 
+        return false;
 }
 
 template <typename T>
-int CDAL<T>::size() const {
+size_t CDAL<T>::size() const {
     return currentSize;
 }
 
@@ -313,6 +324,36 @@ std::ostream& CDAL<T>::print( std::ostream& out ) const {
             out << temp->list[i % 50];
         }
     }
-    out << "}";
+    out << "}" << std::endl;
     return out;
+}
+
+template <typename T>
+T& CDAL<T>::operator[](int i) {
+    if ( i < currentSize ) {
+        int counter = i / 50; // Tells us which array the data is in.
+        int pos = i % 50; // Tells us where the data is in that array.
+        Node* temp = head;
+        for (int j = 0; j != counter; j++) {
+            temp = temp->next;
+        }
+        return temp->list[pos];
+    } else {
+        throw std::domain_error("Position does not exist \"Too Large\"");
+    }
+}
+
+template <typename T>
+T const& CDAL<T>::operator[](int i) const {
+    if ( i < currentSize ) {
+        int counter = i / 50; // Tells us which array the data is in.
+        int pos = i % 50; // Tells us where the data is in that array.
+        Node* temp = head;
+        for (int j = 0; j != counter; j++) {
+            temp = temp->next;
+        }
+        return temp->list[pos];
+    } else {
+        throw std::domain_error("Position does not exist \"Too Large\"");
+    }
 }

@@ -47,45 +47,48 @@ namespace cop3530 {
             typedef CDAL_Iter& self_reference;
       
         private:
-            int position;
+            pointer position;
             Node* here;
+            int counter;
       
         public:
-            explicit CDAL_Iter( Node* start = nullptr ) : here( start ) { 
-                if (start == nullptr) {
-                    this->position = 0;
-                }
-                this->position = 0; 
-            }
+            explicit CDAL_Iter( Node* start = nullptr,
+                                pointer pos = nullptr,
+                                int count = 0 )
+                : here( start ), position( pos ), counter( count ) {}
+               
             
-            CDAL_Iter( const CDAL_Iter& src ) : here( src.here ) { 
-                this->position = src.position; 
-            }
+            CDAL_Iter( const CDAL_Iter& src )
+                : here( src.here ),
+                  position( src.position ),
+                  counter( src.counter ) {}
             
             reference operator*() const {
-                return here->list[position % 50];
+                return *position;
             }
+            
             pointer operator->() const {
-                T* temp = &here->list[position % 50];
-                return temp;
+                return position;
             }
       
             self_reference operator=( const CDAL_Iter& src ) {
-                this = CDAL_Iter( src );
+                here = src.here;
+                position = src.position;
+                counter = src.counter;
                 return this;
             }
 
             self_reference operator++() {
-                if ((position / 50) > ((position - 1) / 50)) {
+                if ((counter / 50) > ((counter - 1) / 50)) {
                     here = here->next;
                 }
-                position++;
+                ++position;
                 return this;
             } // preincrement
 
             self_type operator++(int) {
                 CDAL_Iter temp = CDAL_Iter( this );
-                if ((position / 50) > ((position - 1) / 50)) {
+                if ((counter / 50) > ((counter - 1) / 50)) {
                     here = here->next;
                 }
                 position++;
@@ -93,10 +96,10 @@ namespace cop3530 {
             } // postincrement
 
             bool operator==(const CDAL_Iter& rhs) const {
-                return this == rhs;
+                return position == rhs.position;
             }
             bool operator!=(const CDAL_Iter& rhs) const {
-                return this != rhs;
+                return position != rhs.position;
             }
         }; // end CDAL_Iter 
 
@@ -112,41 +115,51 @@ namespace cop3530 {
             typedef std::forward_iterator_tag iterator_category;
       
             // but not these typedefs...
-            typedef CDAL_Iter self_type;
-            typedef CDAL_Iter& self_reference;
-      
+            typedef CDAL_Const_Iter self_type;
+            typedef CDAL_Const_Iter& self_reference;
+
         private:
-            int position;
-            const Node* here;
+            pointer position;
+            Node* here;
+            int counter;
       
         public:
-            explicit CDAL_Const_Iter( Node* start = nullptr ) : here( start ) { 
-                this->position = 0; 
-            }
-            CDAL_Const_Iter( const CDAL_Iter& src ) : here( src.here ) {
-                this->position = 0;
-            }
+            explicit CDAL_Const_Iter( Node* start = nullptr,
+                                pointer pos = nullptr,
+                                int count = 0 )
+                : here( start ), position( pos ), counter( count ) {}
+               
+            
+            CDAL_Const_Iter( const CDAL_Const_Iter& src )
+                : here( src.here ),
+                  position( src.position ),
+                  counter( src.counter ) {}
+            
             reference operator*() const {
-                return here->list[position % 50];
+                return *position;
             }
+            
             pointer operator->() const {
-                T* temp = &here->list[position % 50];
-                return temp;
-            }      
-            self_reference operator=( const CDAL_Iter& src ) {
-                this = CDAL_Iter( src );
-                return this;
+                return position;
             }
+      
+            self_reference operator=( const CDAL_Const_Iter& src ) {
+                here = src.here;
+                position = src.position;
+                counter = src.counter;
+            }
+
             self_reference operator++() {
-                if ((position / 50) > ((position - 1) / 50)) {
+                if ((counter / 50) > ((counter - 1) / 50)) {
                     here = here->next;
                 }
-                position++;
+                ++position;
                 return this;
             } // preincrement
+
             self_type operator++(int) {
-                CDAL_Const_Iter temp = CDAL_Const_Iter( this );
-                if ((position / 50) > ((position - 1) / 50)) {
+                CDAL_Const_Iter temp = CDAL_Iter( this );
+                if ((counter / 50) > ((counter - 1) / 50)) {
                     here = here->next;
                 }
                 position++;
@@ -154,12 +167,10 @@ namespace cop3530 {
             } // postincrement
 
             bool operator==(const CDAL_Const_Iter& rhs) const {
-                return this->here->item_at(position % 50) == 
-                    rhs->here->item_at(position % 50);
+                return position == rhs.position;
             }
             bool operator!=(const CDAL_Const_Iter& rhs) const {
-                return this->here->item_at(position % 50) != 
-                    rhs->here->item_at(position % 50);            
+                return position != rhs.position;
             }
         }; // end CDAL_Iter 
 
@@ -167,10 +178,11 @@ namespace cop3530 {
         typedef T value_type;
         typedef CDAL_Iter iterator;
         typedef CDAL_Const_Iter const_iterator; 
-        iterator begin() { return CDAL_Iter( head, 0 ); }
-        iterator end() { return CDAL_Iter( nullptr, size() ); }
-        const_iterator begin() const { return CDAL_Const_Iter( head ); }
-        const_iterator end() const { return CDAL_Const_Iter(); } 
+        iterator begin() { return CDAL_Iter( head, head->list, 0 ); }
+        iterator end() { return CDAL_Iter( nullptr, nullptr, currentSize ); }
+        const_iterator begin() const { return CDAL_Const_Iter( head, head->list ,0 ); }
+        const_iterator end() const { return CDAL_Const_Iter( nullptr, nullptr, currentSize ); } 
+
         // CDAL Memeber functions.
         CDAL();
         CDAL( int maxSize );
@@ -189,10 +201,12 @@ namespace cop3530 {
         T remove( int position );
         T item_at( int position ) const;
         bool is_empty() const;
-        int size() const;
+        size_t size() const;
         void clear();
         bool contains( const T& element, 
                        bool equals( const T& a, const T& b  ) ) const;
         std::ostream& print( std::ostream& out ) const;
+        T& operator[](int i);
+        T const& operator[](int i) const;
     };
 }

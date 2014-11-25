@@ -27,6 +27,7 @@ namespace cop3530 {
         // Traversing the list every time is lame.
         int listSize; 
         int poolSize;
+        void pool_cleanup();
     
     public:
 
@@ -50,18 +51,19 @@ namespace cop3530 {
             Node* here;
       
         public:
-            explicit PSLL_Iter( Node* start = nullptr ) : here( start ) {}
+            explicit PSLL_Iter( Node* start = NULL ) : here( start ) {}
             PSLL_Iter( const PSLL_Iter& src ) : here( src.here ) {}
        
             reference operator*() const {
-                return *here->value;
+                return here->value;
             }
             pointer operator->() const {
+                // T* temp = &here->value;
                 return here->value;
             }
       
             self_reference operator=( const PSLL_Iter& src ) {
-                *this = PSLL_Iter( src );
+                here = src.here;
                 return *this;
             }
 
@@ -71,7 +73,7 @@ namespace cop3530 {
             } // preincrement
             
             self_type operator++(int) {
-                PSLL_Iter* result = new PSLL_Iter( *this );
+                self_type result( *this );
                 here = here->next;
                 return result;
             } // postincrement
@@ -97,26 +99,47 @@ namespace cop3530 {
             typedef std::forward_iterator_tag iterator_category;
       
             // but not these typedefs...
-            typedef PSLL_Iter self_type;
-            typedef PSLL_Iter& self_reference;
+            typedef PSLL_Const_Iter self_type;
+            typedef PSLL_Const_Iter& self_reference;
       
         private:
             const Node* here;
       
         public:
-            explicit PSLL_Const_Iter( Node* start = nullptr ) : here( start ) {}
-            PSLL_Const_Iter( const PSLL_Iter& src ) : here( src.here ) {}
+            explicit PSLL_Const_Iter( Node* start = NULL ) : here( start ) {}
+            PSLL_Const_Iter( const PSLL_Const_Iter& src ) : here( src.here ) {}
        
-            reference operator*() const {}
-            pointer operator->() const {}
+            reference operator*() const {
+                return here->value;
+            }
+            
+            pointer operator->() const {
+                return here->value;
+            }
       
-            self_reference operator=( const PSLL_Iter& src ) {}
+            self_reference operator=( const PSLL_Const_Iter& src ) {
+               here = src.here;
+               return *this;
+            }
 
-            self_reference operator++() {} // preincrement
-            self_type operator++(int) {} // postincrement
+            self_reference operator++() {
+                here = here->next;
+                return *this;
+            } // preincrement
+            
+            self_type operator++(int) {
+                self_type result( *this );
+                here = here->next;
+                return result;
+            } // postincrement
 
-            bool operator==(const PSLL_Iter& rhs) const {}
-            bool operator!=(const PSLL_Iter& rhs) const {}
+            bool operator==(const PSLL_Const_Iter& rhs) const {
+                return here == rhs.here;
+            }
+            
+            bool operator!=(const PSLL_Const_Iter& rhs) const {
+                return here != rhs.here;
+            }
         }; // end PSLL_Iter 
 
         typedef std::size_t size_t;
@@ -124,10 +147,10 @@ namespace cop3530 {
         typedef PSLL_Iter iterator;
         typedef PSLL_Const_Iter const_iterator; 
         iterator begin() { return PSLL_Iter( head ); }
-        iterator end() { return PSLL_Iter(); }
+        iterator end() { return PSLL_Iter( tail->next ); }
         const_iterator begin() const { return PSLL_Const_Iter( head ); }
-        const_iterator end() const { return PSLL_Const_Iter(); } 
-
+        const_iterator end() const { return PSLL_Const_Iter( tail->next ); } 
+        
         PSLL();
         PSLL( const PSLL& src );
         ~PSLL();
@@ -144,10 +167,12 @@ namespace cop3530 {
         T remove( int position );
         T item_at( int position ) const;
         bool is_empty() const;
-        int size() const;
+        size_t size() const;
         void clear();
         bool contains( const T& element, 
                        bool equals( const T& a, const T& b  ) ) const;
         std::ostream& print( std::ostream& out ) const;
+        T& operator[](int i);
+        T const& operator[](int i) const;
     };
 }

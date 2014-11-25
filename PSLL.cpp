@@ -17,23 +17,65 @@ PSLL<T>::PSLL() {
 // List copy constructor
 template <typename T>
 PSLL<T>::PSLL( const PSLL& src ) {
-    // SOMEDAY, SOMEHOW
-    // I'M GONNA IMPLEMENT THIS
-    // BUT NOT RIGHT NOW
+    if (src.head != nullptr) {
+        this->head = new Node(src.head->value);
+        Node* temp = src.head;
+        Node* temp2 = head;
+        while (temp != nullptr) {
+            if (temp->next == nullptr) {
+                this->tail = temp2;
+            } else {
+                temp2->next = new Node( temp->next->value );
+            }
+            temp = temp->next;
+            temp2 = temp2->next;
+        }
+        this->listSize = src.listSize;
+        this->poolSize = 0;
+    } else {
+        this->head = nullptr;
+        this->tail = 0;
+        this->listSize = 0;
+        this->poolSize = 0;
+    }
 }
 
 // List deconstructor
 template <typename T>
 PSLL<T>::~PSLL() {
     // clear();
-    // poolHead = nullptr;
+    // Node* temp = poolHead;
+    // Node* temp2;
+    // while (temp != nullptr) {
+    //     temp2 = temp->next;
+    //     delete temp;
+    //     temp = temp2;
+    // }
+}
+
+template <typename T>
+void PSLL<T>::pool_cleanup() {
+    if ( listSize > 100 && poolSize > listSize/2 ) {
+        Node* temp = poolHead;
+        Node* temp2;
+        int counter = poolSize/2;
+        while (counter != 0) {
+            temp2 = temp->next;
+            delete temp;
+            temp = temp2;
+            --counter;
+            --poolSize;
+            if (counter == 1) {
+                poolHead = temp;
+            }
+        }
+    }
 }
 
 // This function replaces an element at a given position with a user passed in
 // element. The element that was at the position previously is returned.
 template <typename T>
 T PSLL<T>::replace( const T& element, int position ) {
-    // Probably not correct!
     if ( listSize != 0 ) {
         Node* start = head;
         for (int i = 0; i != position; i++) {
@@ -181,6 +223,7 @@ T PSLL<T>::pop_front() {
         ++poolSize;
         head = temp;
         --listSize;
+        pool_cleanup();
         return val;
     } else {
         throw std::out_of_range("list is empty!");
@@ -223,7 +266,8 @@ T PSLL<T>::pop_back() {
             temp->next = nullptr;
             tail = temp;
         }
-        -- listSize;
+        --listSize;
+        pool_cleanup();
         return val;
     }
     else {
@@ -260,6 +304,7 @@ T PSLL<T>::remove( int position ) {
             ++poolSize;
             temp2 = nullptr;
             --listSize;
+            pool_cleanup();
             return val;
         }
      } else {
@@ -292,7 +337,7 @@ bool PSLL<T>::is_empty() const {
 
 // This function returns the size of the list.
 template <typename T>
-int PSLL<T>::size() const {
+size_t PSLL<T>::size() const {
     return listSize;
 }
 
@@ -331,11 +376,33 @@ bool PSLL<T>::contains( const T& element,
 template <typename T>
 std::ostream& PSLL<T>::print( std::ostream& out ) const {
     Node* temp = head;
-    std::stringstream string;
+    out << "{";
     for (int i = 0; i != listSize; i++) {
-        string << temp->value << " ";
+        if ( temp != tail ) {
+            out << temp->value << ", ";
+        } else {
+            out << temp->value;
+        }
         temp = temp->next;
     }
-    out << string.str();
+    out << "}" << std::endl;
     return out;
+}
+
+template <typename T>
+T& PSLL<T>::operator[](int i) {
+    Node* temp = head;
+    for (int j = 0; j != i; ++j) {
+        temp = temp->next;
+    }
+    return temp->value;
+}
+
+template <typename T>
+T const& PSLL<T>::operator[](int i) const {
+    Node* temp = head;
+    for (int j = 0; j != i; ++j) {
+        temp = temp->next;
+    }
+    return temp->value;
 }

@@ -23,6 +23,12 @@ SDAL<T>::SDAL( int maxSize ) {
 // List copy constructor
 template <typename T>
 SDAL<T>::SDAL( const SDAL& src ) {
+    this->list = new T[src.maxSize];
+    this->currentSize = src.currentSize;
+    this->maxSize = src.maxSize;
+    for (int i = 0; i != currentSize; ++i) {
+        list[i] = src.list[i];
+    }
 }
 
 // List deconstructor
@@ -172,7 +178,7 @@ bool SDAL<T>::is_empty() const {
 
 // This function returns the size of the list.
 template <typename T>
-int SDAL<T>::size() const {
+size_t SDAL<T>::size() const {
     return currentSize;
 }
 
@@ -209,6 +215,16 @@ std::ostream& SDAL<T>::print( std::ostream& out ) const {
             out << list[i];
         }
     }
-    out << "}";
+    out << "}" << std::endl;
     return out;
+}
+
+template <typename T>
+T& SDAL<T>::operator[](int i) {
+    return list[i]; 
+}
+
+template <typename T>
+T const& SDAL<T>::operator[](int i) const {
+    return list[i]; 
 }

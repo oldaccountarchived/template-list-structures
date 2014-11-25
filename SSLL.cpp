@@ -15,7 +15,26 @@ SSLL<T>::SSLL() {
 // List copy constructor
 template <typename T>
 SSLL<T>::SSLL( const SSLL& src ) {
-    
+    if (src.head != nullptr) {
+        this->head = new Node(src.head->value);
+        Node* temp = src.head;
+        Node* temp2 = head;
+        while (temp != nullptr) {
+            if (temp->next == nullptr) {
+                this->tail = temp2;
+            } else {
+                temp2->next = new Node( temp->next->value );
+            }
+            temp = temp->next;
+            temp2 = temp2->next;
+        }
+        listSize = src.listSize;
+    } else {
+        this->head = nullptr;
+        this->tail = 0;
+        listSize = 0;
+    }
+
 }
 
 // List deconstructor
@@ -199,7 +218,7 @@ bool SSLL<T>::is_empty() const {
 
 // This function returns the current size of the list.
 template <typename T>
-int SSLL<T>::size() const {
+size_t SSLL<T>::size() const {
     return listSize;
 }
 
@@ -236,11 +255,33 @@ bool SSLL<T>::contains( const T& element,
 template <typename T>
 std::ostream& SSLL<T>::print( std::ostream& out ) const {
     Node* temp = head;
-    std::stringstream string;
+    out << "{";
     for (int i = 0; i != listSize; i++) {
-        string << temp->value << " ";
+        if ( temp != tail ) {
+            out << temp->value << ", ";
+        } else {
+            out << temp->value;
+        }
         temp = temp->next;
     }
-    out << string.str();
+    out << "}" << std::endl;
     return out;
+}
+
+template <typename T>
+T& SSLL<T>::operator[](int i) {
+    Node* temp = head;
+    for (int j = 0; j != i; ++j) {
+        temp = temp->next;
+    }
+    return temp->value;
+}
+
+template <typename T>
+T const& SSLL<T>::operator[](int i) const {
+    Node* temp = head;
+    for (int j = 0; j != i; ++j) {
+        temp = temp->next;
+    }
+    return temp->value;
 }

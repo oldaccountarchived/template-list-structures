@@ -41,7 +41,7 @@ CDAL<T>::~CDAL() {
 // element. The element that was at the position previously is returned.
 template <typename T>
 T CDAL<T>::replace( const T& element, int position ) {
-    if ( position < currentSize ) {
+    if ( position < currentSize && position >= 0 ) {
         int counter = position / 50; // Tells us which array the data is in.
         int pos = position % 50; // Tells us where the data is in that array.
         Node* temp = head;
@@ -53,7 +53,7 @@ T CDAL<T>::replace( const T& element, int position ) {
         temp = nullptr;
         return val;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -102,7 +102,7 @@ void CDAL<T>::insert( const T& element, int position ) {
         }
         ++currentSize;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -207,7 +207,7 @@ T CDAL<T>::pop_front() {
 
 template <typename T>
 T CDAL<T>::pop_back() {
-    if ( currentSize != 0 ) {
+    // if ( !is_empty() ) {
         int counter = (currentSize - 1) / 50; // Tells us which array the data is in.
         int pos = (currentSize - 1) % 50; // Tells us where the data is in that array.
         Node* temp = head;
@@ -215,12 +215,9 @@ T CDAL<T>::pop_back() {
             temp = temp->next;
         }
         T val = temp->list[pos];
-        temp = nullptr;
-        --currentSize;
-        return val;
-    } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
-    }
+        // } else {
+        // throw std::out_of_range("The list is empty");
+        // }
 }
 
 template <typename T>
@@ -250,7 +247,7 @@ T CDAL<T>::remove( int position ) {
         --currentSize;
         return val;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -267,7 +264,7 @@ T CDAL<T>::item_at( int position ) const {
         temp = nullptr;
         return val;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -339,7 +336,7 @@ T& CDAL<T>::operator[](int i) {
         }
         return temp->list[pos];
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -354,6 +351,6 @@ T const& CDAL<T>::operator[](int i) const {
         }
         return temp->list[pos];
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }

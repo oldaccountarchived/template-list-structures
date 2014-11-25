@@ -391,18 +391,26 @@ std::ostream& PSLL<T>::print( std::ostream& out ) const {
 
 template <typename T>
 T& PSLL<T>::operator[](int i) {
-    Node* temp = head;
-    for (int j = 0; j != i; ++j) {
-        temp = temp->next;
+    if ( i < listSize ) {
+        Node* temp = head;
+        for (int j = 0; j != i; ++j) {
+            temp = temp->next;
+        }
+        return temp->value;
+    } else {
+        throw std::domain_error("Position does not exist \"Too Large\"");
     }
-    return temp->value;
 }
 
 template <typename T>
 T const& PSLL<T>::operator[](int i) const {
-    Node* temp = head;
-    for (int j = 0; j != i; ++j) {
-        temp = temp->next;
+    if ( i < listSize ) {
+        Node* temp = head;
+        for (int j = 0; j != i; ++j) {
+            temp = temp->next;
+        }
+        return temp->value;
+    } else {
+        throw std::domain_error("Position does not exist \"Too Large\"");
     }
-    return temp->value;
 }

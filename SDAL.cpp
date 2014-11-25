@@ -59,7 +59,11 @@ void SDAL<T>::resizeList() {
 // element. The element that was at the position previously is returned.
 template <typename T>
 T SDAL<T>::replace( const T& element, int position ) {
-    list[position] = element;
+    if ( position < currentSize && position >= 0 ) {
+        list[position] = element;
+    } else {
+        throw std::domain_error("Position does not exist");
+    }
 }
 
 // This function inserts a user passed element at a given position. The function
@@ -67,20 +71,24 @@ T SDAL<T>::replace( const T& element, int position ) {
 // increased by one upon function completion.
 template <typename T>
 void SDAL<T>::insert( const T& element, int position ) {
-    if ( currentSize == maxSize ) {
-        T* temp = new T[(int) (maxSize * 1.5)];
-        for ( int i = 0; i != currentSize; ++i ) {
-            temp[i] = list[i];
+    if ( position <= currentSize && position >= 0) {
+        if ( currentSize == maxSize ) {
+            T* temp = new T[(int) (maxSize * 1.5)];
+            for ( int i = 0; i != currentSize; ++i ) {
+                temp[i] = list[i];
+            }
+            delete[] list;
+            list = temp;
+            maxSize = maxSize * 1.5;
         }
-        delete[] list;
-        list = temp;
-        maxSize = maxSize * 1.5;
+        for ( int i = currentSize; i != (position); --i ) {
+            list[i] = list[i - 1];
+        }
+        list[position] = element;
+        ++currentSize;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    for ( int i = currentSize; i != (position); --i ) {
-        list[i] = list[i - 1];
-    }
-    list[position] = element;
-    ++currentSize;
 }
 
 // This function inserts an element at the very front of the list. It does not
@@ -126,22 +134,30 @@ void SDAL<T>::push_back( const T& element ) {
 // use. The size of the list is reduced by 1 upon function completion.
 template <typename T>
 T SDAL<T>::pop_front() {
-    T temp = list[0];
-    for ( int i = 0; i != currentSize; ++i ) {
-        list[i] = list[i + 1];
+    if ( !is_empty() ) {
+        T temp = list[0];
+        for ( int i = 0; i != currentSize; ++i ) {
+            list[i] = list[i + 1];
+        }
+        --currentSize;
+        resizeList();
+        return temp;
+    } else {
+        throw std::out_of_range("The list is empty");
     }
-    --currentSize;
-    resizeList();
-    return temp;
 }
 
 // This function removes the rear element from the list and returns it for
 // use. The size of the list is reduced by 1 upon function completion.
 template <typename T>
 T SDAL<T>::pop_back() {
-    T temp = list[currentSize - 1];
-    --currentSize;
-    return temp;
+    if ( !is_empty() ) {
+        T temp = list[currentSize - 1];
+        --currentSize;
+        return temp;
+    } else {
+        throw std::out_of_range("The list is empty");
+    }
 }
 
 // This function removes an element from the list at a user specified position
@@ -149,13 +165,17 @@ T SDAL<T>::pop_back() {
 // completion.
 template <typename T>
 T SDAL<T>::remove( int position ) {
-    T temp = list[position];
-    for ( int i = position; i != (currentSize - 1); ++i ) {
-        list[i] = list[i + 1];
+    if ( position < currentSize && position >= 0 ) {
+        T temp = list[position];
+        for ( int i = position; i != (currentSize - 1); ++i ) {
+            list[i] = list[i + 1];
+        }
+        --currentSize;
+        resizeList();
+        return temp;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    --currentSize;
-    resizeList();
-    return temp;
 }
 
 // This function returns the value of an element at user-specified position
@@ -163,7 +183,11 @@ T SDAL<T>::remove( int position ) {
 // of this function being called.
 template <typename T>
 T SDAL<T>::item_at( int position ) const {
-    return list[position];
+    if ( position < currentSize && position >= 0 ) {
+        return list[position];
+    } else {
+        throw std::domain_error("Position does not exist");
+    }
 }
 
 // This function returns true if the list is empty and false otherwise.
@@ -221,10 +245,18 @@ std::ostream& SDAL<T>::print( std::ostream& out ) const {
 
 template <typename T>
 T& SDAL<T>::operator[](int i) {
-    return list[i]; 
+    if ( i < currentSize && i >= 0) {
+        return list[i];
+    } else {
+        throw std::domain_error("Position does not exist");
+    }
 }
 
 template <typename T>
 T const& SDAL<T>::operator[](int i) const {
-    return list[i]; 
+    if (i < currentSize && i >= 0) {
+        return list[i];
+    } else {
+        throw std::domain_error("Position does not exist");
+    }
 }

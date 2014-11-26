@@ -66,7 +66,7 @@ void CDAL<T>::insert( const T& element, int position ) {
         push_back(element);
     } else if ( position == 0 ) {
         push_front(element);
-    } else if ( position < currentSize ) {
+    } else if ( position < currentSize && currentSize > 0 ) {
         T nextVal;
         T nextNextVal;
         Node* temp = head;
@@ -207,7 +207,7 @@ T CDAL<T>::pop_front() {
 
 template <typename T>
 T CDAL<T>::pop_back() {
-    // if ( !is_empty() ) {
+    if ( currentSize != 0 ) {
         int counter = (currentSize - 1) / 50; // Tells us which array the data is in.
         int pos = (currentSize - 1) % 50; // Tells us where the data is in that array.
         Node* temp = head;
@@ -215,9 +215,12 @@ T CDAL<T>::pop_back() {
             temp = temp->next;
         }
         T val = temp->list[pos];
-        // } else {
-        // throw std::out_of_range("The list is empty");
-        // }
+        temp = nullptr;
+        --currentSize;
+        return val;
+    } else {
+        throw std::out_of_range("List is empty");
+    }
 }
 
 template <typename T>
@@ -226,7 +229,7 @@ T CDAL<T>::remove( int position ) {
         return pop_back();
     } else if ( position == 0 ) {
         return pop_front();
-    } else if ( position < currentSize ) {
+    } else if ( position < currentSize && position >= 0 ) {
         Node* temp = head;
         int currentNode = position / 50; // We start at the first node.
         for (int i = 0; i != currentNode; ++i) {
@@ -253,7 +256,7 @@ T CDAL<T>::remove( int position ) {
 
 template <typename T>
 T CDAL<T>::item_at( int position ) const {
-    if ( position < currentSize ) {
+    if ( position < currentSize && position >= 0 ) {
         int counter = position / 50; // Tells us which array the data is in.
         int pos = position % 50; // Tells us where the data is in that array.
         Node* temp = head;
@@ -327,7 +330,7 @@ std::ostream& CDAL<T>::print( std::ostream& out ) const {
 
 template <typename T>
 T& CDAL<T>::operator[](int i) {
-    if ( i < currentSize ) {
+    if ( i < currentSize && i >= 0 ) {
         int counter = i / 50; // Tells us which array the data is in.
         int pos = i % 50; // Tells us where the data is in that array.
         Node* temp = head;
@@ -342,7 +345,7 @@ T& CDAL<T>::operator[](int i) {
 
 template <typename T>
 T const& CDAL<T>::operator[](int i) const {
-    if ( i < currentSize ) {
+    if ( i < currentSize && i >= 0 ) {
         int counter = i / 50; // Tells us which array the data is in.
         int pos = i % 50; // Tells us where the data is in that array.
         Node* temp = head;

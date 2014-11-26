@@ -143,7 +143,7 @@ T SDAL<T>::pop_front() {
         resizeList();
         return temp;
     } else {
-        throw std::out_of_range("The list is empty");
+        throw std::out_of_range("List is empty");
     }
 }
 
@@ -156,7 +156,7 @@ T SDAL<T>::pop_back() {
         --currentSize;
         return temp;
     } else {
-        throw std::out_of_range("The list is empty");
+        throw std::out_of_range("List is empty");
     }
 }
 

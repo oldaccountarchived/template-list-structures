@@ -76,7 +76,7 @@ void PSLL<T>::pool_cleanup() {
 // element. The element that was at the position previously is returned.
 template <typename T>
 T PSLL<T>::replace( const T& element, int position ) {
-    if ( listSize != 0 ) {
+    if ( position < listSize && position >= 0 ) {
         Node* start = head;
         for (int i = 0; i != position; i++) {
             start = start->next;
@@ -85,7 +85,7 @@ T PSLL<T>::replace( const T& element, int position ) {
         start->value = element;
         return temp;
     } else {
-        throw std::domain_error("list is empty!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -98,7 +98,7 @@ void PSLL<T>::insert( const T& element, int position ) {
         push_back( element );
     } else if ( position == 0 ) {
         push_front( element );
-    } else if ( position < listSize ) {
+    } else if ( position < listSize && position > 0 ) {
         Node* temp = head;
         // get the element before the position, as it will point
         // to the element after the position in the end.
@@ -121,7 +121,7 @@ void PSLL<T>::insert( const T& element, int position ) {
         temp->next->next = temp2;
         listSize++; 
     } else {
-        throw std::domain_error("List is too short!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -226,7 +226,7 @@ T PSLL<T>::pop_front() {
         pool_cleanup();
         return val;
     } else {
-        throw std::out_of_range("list is empty!");
+        throw std::out_of_range("List is empty");
     }
 }
 
@@ -271,7 +271,7 @@ T PSLL<T>::pop_back() {
         return val;
     }
     else {
-        throw std::out_of_range("list is empty!");
+        throw std::out_of_range("List is empty");
     }
 }
 
@@ -280,7 +280,7 @@ T PSLL<T>::pop_back() {
 // completion.
 template <typename T>
 T PSLL<T>::remove( int position ) {
-    if ( position < listSize ) { 
+    if ( position < listSize && position >= 0 ) { 
         if ( listSize == 1 ) {
             return pop_back();
         } else {
@@ -308,7 +308,7 @@ T PSLL<T>::remove( int position ) {
             return val;
         }
      } else {
-        throw std::domain_error("List is too short!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -317,12 +317,16 @@ T PSLL<T>::remove( int position ) {
 // of this function being called.
 template <typename T>
 T PSLL<T>::item_at( int position ) const {
-    Node* temp = head;
-    for (int i = 0; i != position; ++i) {
-        temp = temp->next;
+    if ( position < listSize && position >= 0 ) {
+        Node* temp = head;
+        for (int i = 0; i != position; ++i) {
+            temp = temp->next;
+        }
+        T value = temp->value;
+        return value;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    T value = temp->value;
-    return value;
 }
 
 // This function returns true if the list is empty and false otherwise.
@@ -391,26 +395,26 @@ std::ostream& PSLL<T>::print( std::ostream& out ) const {
 
 template <typename T>
 T& PSLL<T>::operator[](int i) {
-    if ( i < listSize ) {
+    if ( i < listSize && i >= 0 ) {
         Node* temp = head;
         for (int j = 0; j != i; ++j) {
             temp = temp->next;
         }
         return temp->value;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }
 
 template <typename T>
 T const& PSLL<T>::operator[](int i) const {
-    if ( i < listSize ) {
+    if ( i < listSize && i >= 0 ) {
         Node* temp = head;
         for (int j = 0; j != i; ++j) {
             temp = temp->next;
         }
         return temp->value;
     } else {
-        throw std::domain_error("Position does not exist \"Too Large\"");
+        throw std::domain_error("Position does not exist");
     }
 }

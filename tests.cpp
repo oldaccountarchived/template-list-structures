@@ -4,10 +4,43 @@
 #include "PSLL.cpp"
 #include "SDAL.cpp"
 #include "CDAL.cpp"
+#include <string>
 
 // First test the SSLL.
 TEST_CASE ( "SSLL tests are done now!", "[SSLL]" ) {
     cop3530::SSLL<int> list1;
+    SECTION ( "Test exception handling", "[exceptions]" ) {
+        try {
+            list1.pop_back();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.pop_front();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.item_at(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.insert(56, -2);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.remove(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1[-2];
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+    }
     SECTION ( "Test iterators", "[SSLL_Iter]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_back(i * 5);
@@ -141,6 +174,38 @@ TEST_CASE ( "SSLL tests are done now!", "[SSLL]" ) {
 // Next we'll test the PSLL.
 TEST_CASE ( "PSLL tests are done now!", "[PSLL]" ) {
     cop3530::PSLL<int> list1;
+    SECTION ( "Test exception handling", "[exceptions]" ) {
+        try {
+            list1.pop_back();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.pop_front();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.item_at(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.insert(56, -2);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.remove(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1[-2];
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+    }
     SECTION ( "Test iterators", "[PSLL_Iter]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_back(i * 5);
@@ -274,6 +339,38 @@ TEST_CASE ( "PSLL tests are done now!", "[PSLL]" ) {
 
 TEST_CASE ( "SDAL tests are done now!", "[SDAL]" ) {
     cop3530::SDAL<int> list1;
+    SECTION ( "Test exception handling", "[exceptions]" ) {
+        try {
+            list1.pop_back();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.pop_front();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.item_at(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.insert(56, -2);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.remove(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1[-2];
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+    }
     SECTION ( "Test iterators", "[SDAL_Iter]" ) {
         for (int i = 0; i < 200; i++) {
             list1.push_back(i * 5);
@@ -439,6 +536,38 @@ TEST_CASE ( "CDAL tests are done now!", "[CDAL]" ) {
     //     }
     //     REQUIRE( counter == 200 );
     // }
+    SECTION ( "Test exception handling", "[exceptions]" ) {
+        try {
+            list1.pop_back();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.pop_front();
+        } catch (std::out_of_range e) {
+            REQUIRE ( std::string(e.what()) == std::string("List is empty") );
+        }
+        try {
+            list1.item_at(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.insert(56, -2);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1.remove(1);
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+        try {
+            list1[-2];
+        } catch (std::domain_error e) {
+            REQUIRE ( std::string(e.what()) == std::string("Position does not exist") );
+        }
+    }
     SECTION ( "Test pop_front.", "[pop_front]" ) { 
         for (int i = 0; i < 200; i++) {
             list1.push_back(i * 5);

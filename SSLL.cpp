@@ -47,7 +47,7 @@ SSLL<T>::~SSLL() {
 // element. The element that was at the position previously is returned.
 template <typename T>
 T SSLL<T>::replace( const T& element, int position ) {
-    if ( listSize != 0 ) {
+    if ( position < listSize && position >= 0 ) {
         Node* start = head;
         for (int i = 0; i != position; i++) {
             start = start->next;
@@ -56,20 +56,21 @@ T SSLL<T>::replace( const T& element, int position ) {
         start->value = element;
         return temp;
     } else {
-        throw std::domain_error("list is empty!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
 // This function inserts a user passed element at a given position. The function
 // does not return anything but does modify the list. The size of the list is
-// increased by one upon function completion.
+// increased by one upon function completion.This function replaces an element at a given position with a user passed in
+// element. The element that was at the position previously is returned.
 template <typename T>
 void SSLL<T>::insert( const T& element, int position ) {
     if ( position == listSize ) { 
         push_back( element );
     } else if ( position == 0 ) {
         push_front( element );
-    } else if ( position < listSize ) {
+    } else if ( position < listSize && listSize > 0 ) {
         Node* temp = head;
         // get the element before the position, as it will point
         // to the element after the position in the end.
@@ -81,7 +82,7 @@ void SSLL<T>::insert( const T& element, int position ) {
         temp->next->next = temp2;
         ++listSize; 
     } else {
-        throw std::domain_error("List is too short!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -128,7 +129,7 @@ T SSLL<T>::pop_front() {
         listSize--;
         return val;
     } else {
-        throw std::out_of_range("list is empty!");
+        throw std::out_of_range("List is empty");
     }
 }
 
@@ -159,7 +160,7 @@ T SSLL<T>::pop_back() {
         listSize--;
         return val;
     } else {
-        throw std::out_of_range("list is empty!");
+        throw std::out_of_range("List is empty");
     }
 }
 
@@ -168,7 +169,7 @@ T SSLL<T>::pop_back() {
 // completion.
 template <typename T>
 T SSLL<T>::remove( int position ) {
-    if ( position < listSize ) {
+    if ( position < listSize && position >= 0 ) {
         if ( listSize == 1 ) {
             return pop_back();
         } else {
@@ -189,7 +190,7 @@ T SSLL<T>::remove( int position ) {
             return val;
         }
     } else {
-        throw std::domain_error("List is too short!");
+        throw std::domain_error("Position does not exist");
     }
 }
 
@@ -198,12 +199,16 @@ T SSLL<T>::remove( int position ) {
 // of this function being called.
 template <typename T>
 T SSLL<T>::item_at( int position ) const {
-    Node* temp = head;
-    for (int i = 0; i != position; ++i) {
-        temp = temp->next;
+    if ( position < listSize && position >= 0 ) {
+        Node* temp = head;
+        for (int i = 0; i != position; ++i) {
+            temp = temp->next;
+        }
+        T value = temp->value;
+        return value;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    T value = temp->value;
-    return value;
 }
 
 // This function returns true if the list is empty and false otherwise.
@@ -270,18 +275,26 @@ std::ostream& SSLL<T>::print( std::ostream& out ) const {
 
 template <typename T>
 T& SSLL<T>::operator[](int i) {
-    Node* temp = head;
-    for (int j = 0; j != i; ++j) {
-        temp = temp->next;
+    if ( i < listSize && i >= 0 ) {
+        Node* temp = head;
+        for (int j = 0; j != i; ++j) {
+            temp = temp->next;
+        }
+        return temp->value;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    return temp->value;
 }
 
 template <typename T>
 T const& SSLL<T>::operator[](int i) const {
-    Node* temp = head;
-    for (int j = 0; j != i; ++j) {
-        temp = temp->next;
+    if ( i < listSize && i >= 0 ) {
+        Node* temp = head;
+        for (int j = 0; j != i; ++j) {
+            temp = temp->next;
+        }
+        return temp->value;
+    } else {
+        throw std::domain_error("Position does not exist");
     }
-    return temp->value;
 }
